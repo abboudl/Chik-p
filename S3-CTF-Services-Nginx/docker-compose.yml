@@ -1,0 +1,35 @@
+version: '3.5'
+
+services:
+  nginx:
+    container_name: ctf-nginx-https-1.17
+    image: ctf-nginx:1.17
+    build: ./nginx/
+    restart: unless-stopped
+    ports : 
+      - 80:8080
+      - 443:8443
+    volumes:
+      # Nginx logs volume 
+      - nginx-logs:/var/log/nginx/
+
+  
+  filebeat:
+    container_name: ctf-nginx-filebeat
+    image: ctf-nginx-filebeat:${ELK_VERSION}
+    hostname: filebeat
+    user: root
+    build: ./filebeat/
+    restart: on-failure
+    volumes:
+      # Nginx logs volume 
+      - nginx-logs:/var/log/nginx/
+      # Named volume fsdata. This is used to persist the registry file between restarts, so to avoid data duplication
+      - fbdata-nginx:/usr/share/filebeat/data/
+    depends_on:
+      - nginx
+
+volumes:
+  nginx-logs:
+  fbdata-nginx:
+

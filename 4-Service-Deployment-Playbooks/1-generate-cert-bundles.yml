@@ -1,0 +1,225 @@
+- hosts: localhost
+  vars:
+    ca_common_name: "ca.int.ctf.issessions.ca"
+    elk_internal_fqdn: "elk.int.ctf.issessions.ca"
+    elk_private_ip: "10.10.20.51"
+  
+  tasks:
+  - name: >- 
+      Create a TLS folder in the current directory. This folder will act as a staging 
+      area for all CTF TLS certs. In subsequent playbooks, they will be transferred to their 
+      respective hosts.
+    ansible.builtin.file:
+      path: ./tls
+      state: directory
+      mode: '0755'
+
+  - name: Create a directory for the CTF's internal certificate authority (CA).
+    ansible.builtin.file:
+      path: ./tls/ca
+      state: directory
+      mode: '0755'
+
+  - name: Create the CA's private key, an 4096-bit RSA key
+    openssl_privatekey:
+      path: ./tls/ca/ca_key.pem
+      type: RSA
+      size: 4096
+      state: present
+    register: ca_key
+
+  - name: Create the CA's Certificate Signing Request (CSR). This will be signed to generate the CA certificate.
+    openssl_csr:
+      path: ./tls/ca/ca.csr
+      privatekey_path: "{{ ca_key.filename }}"
+      common_name: "{{ ca_common_name }}"
+      digest: sha256
+      basic_constraints: 'CA:TRUE'
+      basic_constraints_critical: yes
+      key_usage:
+        - keyCertSign
+        - cRLSign
+        - digitalSignature
+    register: ca_csr
+
+  - name: Sign the CA's Certificate Signing Request with the CA's private key to generate the CA certificate.
+    openssl_certificate:
+      path: ./tls/ca/ca.crt
+      csr_path: "{{ ca_csr.filename }}"
+      privatekey_path: "{{ ca_key.filename }}"
+      provider: selfsigned
+    register: ca_crt
+
+  - name: >- 
+      Create elasticsearch TLS certificate bundle directory. This directory will house the elasticsearch
+      certificate bundles. There are two certificate bundles, one that encrypts communication at the 
+      transport layer between elasticsearch cluster nodes, and another bundle the encrypts http traffic
+      between elasticsearch nodes and elasticsearch clients.
+    ansible.builtin.file:
+      path: ./tls/elasticsearch-tls/
+      state: directory
+      mode: '0755'
+
+  - name: Create elasticsearch nodes' private key. This is the transport layer key.
+    openssl_privatekey:
+      path: ./tls/elasticsearch-tls/es-transport-key.pem
+      type: RSA
+      size: 4096
+      state: present
+    register: es_transport_key
+
+  - name: >-
+      Create the CSR for the elasticsearch cluster nodes (Transport Layer). The same certificate will be used 
+      for all 3 elasticsearch nodes, therefore the subject alternative names in the CSR are set to es01, es02, 
+      AND es03. Furthermore, the certificate will be used for both client and server authentication 
+      (i.e. mutual authentication between cluster nodes).
+    openssl_csr:
+      path: ./tls/elasticsearch-tls/es-transport.csr
+      privatekey_path: "{{ es_transport_key.filename }}"
+      common_name: es01
+      subject_alt_name: 'DNS:es01,DNS:es02,DNS:es03'
+      extended_key_usage:
+        - serverAuth
+        - clientAuth 
+    register: es_transport_csr
+
+  - name: >-
+      Sign the elasticsearch transport layer CSR with the CA's private key produce the elasticsearch 
+      transport layer certificate which encrypts traffic between elasticsearch nodes.
+    openssl_certificate:
+      path: ./tls/elasticsearch-tls/es-transport.crt
+      csr_path: "{{ es_transport_csr.filename }}"
+      provider: ownca
+      ownca_path: "{{ ca_crt.filename }}"
+      ownca_privatekey_path: "{{ ca_key.filename }}"
+    register: es_transport_crt   
+
+  - name: >-
+      Next, we generate HTTP layer elasticsearch certificates to protect traffic between elasticsearch nodes 
+      and elasticsearch clients. First, create the elasticsearch HTTP layer private key.
+    openssl_privatekey:
+      path: ./tls/elasticsearch-tls/es-http-key.pem
+      type: RSA
+      size: 4096
+      state: present
+    register: es_http_key
+
+  - name: >-
+      Next, create the Certificate Signing Request (CSR) for the elasticsearch cluster nodes (HTTP Layer). 
+      The same certificate will be used for all 3 elasticsearch nodes, therefore the subject alternative 
+      names in the CSR are set to es01, es02, AND es03 in case http communication originates from within 
+      the docker subnet. The GCP FQDN and IP address for the ELK mahine are also included in case http 
+      traffic originates from outside the GCP VPC. In this case, certificate will be used for server 
+      authentication only.
+    openssl_csr:
+      path: ./tls/elasticsearch-tls/es-http.csr
+      privatekey_path: "{{ es_http_key.filename }}"
+      common_name: es01
+      subject_alt_name: 'DNS:es01,DNS:es02,DNS:es03,DNS:{{ elk_internal_fqdn }},IP:{{ elk_private_ip }}'
+      extended_key_usage:
+        - serverAuth
+    register: es_http_csr
+
+  - name: >- 
+      Sign the elasticsearch http layer CSR with the CA's private key to produce the elasticsearch
+      http layer certificate which encrypts traffic between elasticsearch nodes and elastissearch clients.
+    openssl_certificate:
+      path: ./tls/elasticsearch-tls/es-http.crt
+      csr_path: "{{ es_http_csr.filename }}"
+      provider: ownca
+      ownca_path: "{{ ca_crt.filename }}"
+      ownca_privatekey_path: "{{ ca_key.filename }}"
+    register: es_http_crt
+  
+  - name: Compress elasticsearch-tls directory
+    community.general.archive:
+      path: ./tls/elasticsearch-tls
+      dest: ./tls/elasticsearch-tls.tgz
+
+  - name: >- 
+      Next, create kibana certificate bundle directory. The certificate in this directory will encrypt traffic
+      between Kibana and the user's browser. 
+    ansible.builtin.file:
+      path: ./tls/kibana-tls/
+      state: directory
+      mode: '0755'
+    
+  - name: Create the kibana's server's private key
+    openssl_privatekey:
+      path: ./tls/kibana-tls/kibana-key.pem
+      type: RSA
+      size: 4096
+      state: present
+    register: kibana_key
+
+  - name: Create Kibana server's Certificate Signing Request (CSR). Certificate is used for server authentication.
+    openssl_csr:
+      path: ./tls/kibana-tls/kibana.csr
+      privatekey_path: "{{ kibana_key.filename }}"
+      common_name: kibana
+      subject_alt_name: 'DNS:kibana,DNS:{{ elk_internal_fqdn }},IP:{{ elk_private_ip }}'
+      extended_key_usage:
+        - serverAuth
+    register: kibana_csr
+
+  - name: >-
+      Sign the Kibana's server's CSR with the CA's private key to produce the Kibana
+      certificate which encrypts traffic between Kibana and the user's browser.
+    openssl_certificate:
+      path: ./tls/kibana-tls/kibana.crt
+      csr_path: "{{ kibana_csr.filename }}"
+      provider: ownca
+      ownca_path: "{{ ca_crt.filename }}"
+      ownca_privatekey_path: "{{ ca_key.filename }}"
+    register: kibana_crt
+
+  - name: Compress kibana-tls directory
+    community.general.archive:
+      path: ./tls/kibana-tls
+      dest: ./tls/kibana-tls.tgz
+
+  - name: >- 
+      Next, create logstash certificate bundle directory. The certificate in this directory will encrypt traffic
+      between logstash and beats agents. 
+    ansible.builtin.file:
+      path: ./tls/logstash-tls/
+      state: directory
+      mode: '0755'
+    
+  - name: Create the logstash server's private key
+    openssl_privatekey:
+      path: ./tls/logstash-tls/logstash-key.pem
+      type: RSA
+      size: 4096
+      state: present
+    register: logstash_key
+
+  - name: Create logstash server's Certificate Signing Request (CSR). Certificate is used to authenticate the logstash server to the beats agents.
+    openssl_csr:
+      path: ./tls/logstash-tls/logstash.csr
+      privatekey_path: "{{ logstash_key.filename }}"
+      common_name: logstash
+      subject_alt_name: 'DNS:logstash,DNS:{{ elk_internal_fqdn }},IP:{{ elk_private_ip }}'
+      extended_key_usage:
+        - serverAuth
+    register: logstash_csr
+
+  - name: >-
+      Sign the logstash's server's CSR with the CA's private key to produce the logstash
+      certificate which encrypts traffic between logstash and the elastic beats.
+    openssl_certificate:
+      path: ./tls/logstash-tls/logstash.crt
+      csr_path: "{{ logstash_csr.filename }}"
+      provider: ownca
+      ownca_path: "{{ ca_crt.filename }}"
+      ownca_privatekey_path: "{{ ca_key.filename }}"
+    register: logstash_crt
+
+  - name: Compress logstash-tls directory
+    community.general.archive:
+      path: ./tls/logstash-tls
+      dest: ./tls/logstash-tls.tgz
+ 
+
+
+

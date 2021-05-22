@@ -1,0 +1,84 @@
+version: '2'
+
+services:
+  ctfd:
+    container_name: ctfd-gunicorn-appserver
+    build: ./
+    image: ctfd-gunicorn:3.3.0
+    user: root
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY: $CTFD_SECRET_KEY
+      UPLOAD_FOLDER: /var/uploads
+      DATABASE_URL: $MYSQL_DATABASE_URL
+      REDIS_URL: redis://cache:6379
+      WORKERS: 10
+      LOG_FOLDER: /var/log/CTFd
+      ACCESS_LOG: /var/log/gunicorn/access.log
+      ERROR_LOG: /var/log/gunicorn/error.log
+      REVERSE_PROXY: "true"
+      SWAGGER_UI: "true"
+      HTML_SANITIZATION: "true"
+    volumes:
+      - .data/CTFd/logs:/var/log/CTFd
+      - .data/gunicorn/logs:/var/log/gunicorn
+      - .data/CTFd/uploads:/var/uploads
+    depends_on:
+      - db
+    networks:
+        default:
+        internal:
+
+  db:
+    container_name: ctfd-mariadb-database
+    image: mariadb:10.4.12
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+    volumes:
+      - .data/mysql:/var/lib/mysql
+    networks:
+        internal:
+    # This command is required to set important mariadb defaults
+    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
+
+  cache:
+    container_name: ctfd-redis-cache
+    image: redis:4
+    restart: always
+    volumes:
+    - .data/redis:/data
+    networks:
+        internal:
+
+  filebeat:
+    container_name: filebeat
+    image: ctf-filebeat:7.10.2
+    hostname: filebeat
+    user: root
+    build: ./filebeat/
+    restart: on-failure
+    volumes:
+      # Mount the CTFD logs directory 
+      - .data/CTFd/logs/:/var/log/CTFd/
+      # Named volume fbdata. This is used to persist the registry file between restarts, so to avoid data duplication
+      - fbdata:/usr/share/filebeat/data/
+    depends_on:
+      - db
+      - cache
+      - ctfd
+    networks:
+      default:
+
+volumes:
+  fbdata:
+
+networks:
+    default:
+    internal:
+        internal: true

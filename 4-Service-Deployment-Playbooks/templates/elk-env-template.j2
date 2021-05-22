@@ -1,0 +1,8 @@
+ELK_VERSION="7.10.2"
+
+# User Passwords
+BOOTSTRAP_ELASTIC_PASSWORD={{ lookup('community.general.lastpass', 'ctf_elastic_user_bootstrap_pass', field='password') }}
+PERMANENT_ELASTIC_PASSWORD={{ lookup('community.general.lastpass', 'ctf_elastic_user_permanent_pass', field='password') }}
+LOGSTASH_SYSTEM_USER_PASS={{ lookup('community.general.lastpass', 'ctf_logstash_system_user_pass', field='password') }}
+LOGSTASH_INTERNAL_USER_PASS={{ lookup('community.general.lastpass', 'ctf_logstash_internal_user_pass', field='password') }}
+KIBANA_SYSTEM_USER_PASS={{ lookup('community.general.lastpass', 'ctf_kibana_system_user_pass', field='password') }}

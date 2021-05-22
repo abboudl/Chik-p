@@ -1,0 +1,6 @@
+.env
+*.pem
+*.p12
+*.crt
+*.csr
+nginx/nginx-letsencrypt-tls/

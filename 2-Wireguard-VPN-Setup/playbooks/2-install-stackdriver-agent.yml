@@ -1,0 +1,29 @@
+- hosts: vpn
+  user: ansible
+  become: yes
+  
+  tasks:
+  - name: >- 
+     The stackdriver agent is the Google Cloud Platform monitoring agent - it provides various analytics on the 
+     host including but not limited CPU, Memory, and Disk utilization. First, download a script that adds the
+     agent's repository to /etc/apt/sources.list
+    get_url:
+      url: https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh
+      dest: /tmp/add-monitoring-agent-repo.sh
+      mode: 0750
+
+  - name: Execute the script to add the stackdriver-agent respository /etc/apt/sources.list
+    command:
+      chdir: /tmp
+      cmd: bash add-monitoring-agent-repo.sh
+  
+  - name: Install the stackdriver-agent package
+    apt:
+      name: stackdriver-agent
+      state: present
+      update_cache: yes 
+
+  - name: Start the stackdriver monitoring agent
+    service:
+      name: stackdriver-agent
+      state: restarted

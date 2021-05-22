@@ -1,0 +1,33 @@
+- hosts: haproxy
+  user: ctf
+
+  tasks:
+    - name: Clone HAProxy Github respository
+      git:
+        repo: "git@github.com:{{ haproxy_git_repo_owner }}/{{ haproxy_git_repo_name }}.git"
+        dest: "/home/ctf/{{ haproxy_git_repo_name }}"
+        accept_hostkey: yes
+ 
+    - name: >- 
+        Transfer secrets file containing HAProxy secrets. Pull all secrets
+        from password vault and populate haproxy-env-template.j2, then
+        transfer the result.
+      ansible.builtin.template:
+        src: "./templates/haproxy-env-template.j2"
+        dest: "/home/ctf/{{ haproxy_git_repo_name }}/.env"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+
+    - name: Build CTFd images (ctfd flask app, redis, and mariadb) and start containers
+      community.docker.docker_compose:
+        project_src: "/home/ctf/{{ haproxy_git_repo_name }}/"
+        build: yes
+        nocache: yes
+        state: present
+      register: output
+
+    - ansible.builtin.debug:
+        var: output 
+
+    

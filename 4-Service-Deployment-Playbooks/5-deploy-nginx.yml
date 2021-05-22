@@ -1,0 +1,77 @@
+- hosts: nginx
+  user: ctf
+
+  tasks:
+    - name: Clone Nginx Github respository
+      git:
+        repo: "git@github.com:{{ nginx_git_repo_owner }}/{{ nginx_git_repo_name }}.git"
+        dest: "/home/ctf/{{ nginx_git_repo_name }}"
+        accept_hostkey: yes
+
+    - name: >-
+        Transfer secrets file containing Nginx secrets. Pull all secrets
+        from password vault and populate nginx-env-template.j2, then
+        transfer the result.
+      ansible.builtin.template:
+        src: "./templates/nginx-env-template.j2"
+        dest: "/home/ctf/{{ nginx_git_repo_name }}/.env"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+
+    - name: Create Nginx letsencrypt certificate bundle directory
+      ansible.builtin.file:
+        path: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/"
+        state: directory
+        owner: ctf                                          
+        group: ctf
+        mode: '0755'
+
+    - name: Transfer Nginx letsencrypt certificate bundle
+      ansible.builtin.unarchive:
+        src: "./tls/nginx-letsencrypt-tls.tgz"
+        dest: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/" 
+        owner: ctf
+        group: ctf
+        mode: '0700'
+
+    - name: >- 
+        Lookup files with .pem pattern. These files are secrets and 
+        their permissions must be set to 600.
+      find:
+        paths: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/"
+        file_type: file
+        patterns: "*.pem"
+        recurse: yes
+      register: pemlist
+
+    - name: debug - print matched .pem files.
+      debug:
+        msg: "{{ pemlist.files }}"
+
+    - name: Change .pem files' permissions to 600
+      file:
+        path: "{{ item.path }}"
+        state: file
+        owner: ctf
+        group: ctf
+        mode: '0600'
+      with_items: "{{ pemlist.files }}"
+
+    - name: Generate Diffie-Hellman parameters for stronger SSL (2048 bits)
+      community.crypto.openssl_dhparam:
+        path: "/home/ctf/{{ nginx_git_repo_name }}/nginx/dhparam-2048.pem"
+        size: 2048
+
+    - name: Build Nginx image and start container
+      community.docker.docker_compose:
+        project_src: "/home/ctf/{{ nginx_git_repo_name }}/"
+        build: yes
+        nocache: yes
+        state: present
+      register: output
+
+    - ansible.builtin.debug:
+        var: output  
+
+

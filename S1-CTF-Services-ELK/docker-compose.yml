@@ -1,0 +1,125 @@
+version: '3.2'
+
+services:
+  es01:
+    container_name: ctf-es01
+    image: ctf-es01:$ELK_VERSION
+    build:
+      context: es01/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    environment:
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+      ELASTIC_PASSWORD: "$BOOTSTRAP_ELASTIC_PASSWORD"
+      PERMANENT_ELASTIC_PASSWORD: "$PERMANENT_ELASTIC_PASSWORD"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - type: volume
+        source: es01
+        target: /usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elk
+
+  
+  es02:
+    container_name: ctf-es02
+    image: ctf-es02:$ELK_VERSION
+    build:
+      context: es02/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    environment:
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+      ELASTIC_PASSWORD: "$BOOTSTRAP_ELASTIC_PASSWORD"
+      PERMANENT_ELASTIC_PASSWORD: "$PERMANENT_ELASTIC_PASSWORD"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - type: volume
+        source: es02
+        target: /usr/share/elasticsearch/data
+    networks:
+      - elk
+
+
+  es03:
+    container_name: ctf-es03
+    image: ctf-es03:$ELK_VERSION
+    build:
+      context: es03/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    environment:
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+      ELASTIC_PASSWORD: "$BOOTSTRAP_ELASTIC_PASSWORD"
+      PERMANENT_ELASTIC_PASSWORD: "$PERMANENT_ELASTIC_PASSWORD"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - type: volume
+        source: es03
+        target: /usr/share/elasticsearch/data
+    networks:
+      - elk
+
+   
+  logstash:
+    container_name: ctf-logstash
+    image: ctf-logstash:$ELK_VERSION 
+    build:
+      context: logstash/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    ports:
+      - 5044:5044
+      - 5000:5000/tcp
+      - 5000:5000/udp
+      - 9600:9600
+    environment:
+      LOGSTASH_SYSTEM_USER_PASS: "$LOGSTASH_SYSTEM_USER_PASS"
+      LOGSTASH_INTERNAL_USER_PASS: "$LOGSTASH_INTERNAL_USER_PASS"
+      LS_JAVA_OPTS: "-Xms2g -Xmx2g"
+    networks:
+      - elk
+    depends_on:
+      - es01
+      - es02
+      - es03
+
+  kibana:
+    container_name: ctf-kibana
+    image: ctf-kibana:$ELK_VERSION
+    build:
+      context: kibana/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    ports:
+      - 5601:5601
+    environment:
+      KIBANA_SYSTEM_USER_PASS: "$KIBANA_SYSTEM_USER_PASS" 
+    networks:
+      - elk
+    depends_on:
+      - es01
+      - es02
+      - es03
+      - logstash
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  es01:
+  es02:
+  es03:

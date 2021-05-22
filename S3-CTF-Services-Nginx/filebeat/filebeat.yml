@@ -1,0 +1,25 @@
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/accesses.log*
+  fields:
+    log_id: nginx-access
+  fields_under_root: true
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/errors.log*
+  fields:
+    log_id: nginx-error
+  fields_under_root: true
+
+filebeat.registry.path: /usr/share/filebeat/data/registry               
+     
+output.logstash:
+  enabled: true
+  hosts: ["elk.int.ctf.issessions.ca:5044"]
+  worker: 2
+

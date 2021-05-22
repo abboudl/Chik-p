@@ -1,0 +1,56 @@
+- hosts: vpn
+  user: ansible
+  become: yes
+  tasks:
+    - name: Install the latest version of the aptitude package manager using apt
+      apt: 
+        name: aptitude 
+        state: latest 
+        update_cache: yes 
+        force_apt_get: yes
+
+    - name: Install essential packages and utilities 
+      apt: 
+        name:
+        - apt-transport-https
+        - ca-certificates
+        - curl 
+        - software-properties-common
+        - python3-pip
+        - python3-setuptools
+        - virtualenv
+        - zip
+        - tree
+        - acl
+        state: latest 
+        update_cache: yes
+
+    - name: >- 
+        Install Python's docker and docker-compose modules. Required for the ansible docker-compose
+        module to work.
+      pip:
+        name: 
+          - docker
+          - docker-compose    
+
+    - name: Add Docker GPG apt key for signature verification of packages from the Docker repository
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add the Docker repository to /etc/apt/sources.list to gain access to Docker packages
+      apt_repository:
+        repo: "deb https://download.docker.com/linux/{{ ansible_distribution|lower  }} {{ ansible_distribution_release  }} stable"
+        state: present
+
+    - name: Run apt update and install the Docker Community Engine 
+      apt: 
+        update_cache: yes 
+        name: docker-ce 
+        state: latest
+
+    - name: Enable and start the Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true

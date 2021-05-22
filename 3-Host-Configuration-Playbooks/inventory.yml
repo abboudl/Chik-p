@@ -1,0 +1,26 @@
+all:
+  children:
+    internal:
+      hosts:
+        ctfd.int.ctf.issessions.ca: 
+        elk.int.ctf.issessions.ca:
+    dmz:
+      hosts:
+        nginx.int.ctf.issessions.ca:
+        haproxy.int.ctf.issessions.ca:
+    elk:
+      hosts:
+        elk.int.ctf.issessions.ca:
+    ctfd:
+      hosts:
+        ctfd.int.ctf.issessions.ca:
+    nginx:
+      hosts:
+        nginx.int.ctf.issessions.ca:
+    haproxy:
+      hosts:
+        haproxy.int.ctf.issessions.ca:
+        
+
+
+

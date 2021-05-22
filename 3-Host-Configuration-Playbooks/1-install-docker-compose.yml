@@ -1,0 +1,30 @@
+- hosts: dmz:internal
+  user: ansible
+  become: yes
+  vars: 
+    docker_compose_vsn_wanted: "1.27.4"
+  
+  tasks:
+  - name: >- 
+      Check current docker-compose version. If docker-compose exists, register the output of docker-compose 
+      --version in the docker_compose_vsn variable and extract the version number into docker_compose_current_version.
+    command: docker-compose --version
+    register: docker_compose_vsn
+    changed_when: false
+    failed_when: false
+    check_mode: no
+
+  - set_fact:
+      docker_compose_current_version: "{{ docker_compose_vsn.stdout | regex_search('(\\d+(\\.\\d+)+)') }}"
+    when:
+      - docker_compose_vsn.stdout is defined
+
+  - name: If docker-compose doesn't exist on the host or if it's version it less than our desired version, Install/upgrade it.
+    get_url: 
+      url : "https://github.com/docker/compose/releases/download/{{ docker_compose_vsn_wanted }}/docker-compose-Linux-x86_64"
+      dest: /usr/local/bin/docker-compose
+      mode: '755'
+      force: yes
+    when: >
+      docker_compose_current_version is not defined
+      or docker_compose_current_version is version(docker_compose_vsn_wanted, '<')

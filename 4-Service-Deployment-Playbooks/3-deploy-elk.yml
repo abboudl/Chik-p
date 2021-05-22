@@ -1,0 +1,85 @@
+- hosts: elk
+  user: ctf
+
+  tasks:
+    - name: Clone ELK Github respository
+      git:
+        repo: "git@github.com:{{ elk_git_repo_owner }}/{{ elk_git_repo_name }}.git"
+        dest: "/home/ctf/{{ elk_git_repo_name }}"
+        accept_hostkey: yes
+
+    - name: Set permissions of ELK repository to those of the CTF infrastructure administrator.
+      file:
+        path: "/home/ctf/{{ elk_git_repo_name }}" 
+        owner: "ctf"
+        group: "ctf"
+        state: directory
+        recurse: yes
+
+    - name: >-
+        Transfer secrets file containing ELK secrets. Before transfer, pull all secrets 
+        from password vault and populate elk-env-template.j2 template.
+      ansible.builtin.template:
+        src: "./templates/elk-env-template.j2"
+        dest: "/home/ctf/{{ elk_git_repo_name }}/.env"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+
+    - name: >-
+        Transfer Elasticsearch TLS certificate bundle into the ELK git repository on the remote host,
+        once per cluster node (3 transfers in total).
+      ansible.builtin.unarchive:
+        src: "./tls/elasticsearch-tls.tgz"
+        dest: "{{ item }}"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+      loop:
+        - "/home/ctf/{{ elk_git_repo_name }}/es01/config/"
+        - "/home/ctf/{{ elk_git_repo_name }}/es02/config/"
+        - "/home/ctf/{{ elk_git_repo_name }}/es03/config/"  
+  
+    - name: Transfer Logstash TLS certificate bundle into the ELK git repository on the remote host
+      ansible.builtin.unarchive:
+        src: "./tls/logstash-tls.tgz"
+        dest: "/home/ctf/{{ elk_git_repo_name }}/logstash/config/"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+    
+    - name: Transfer Kibana TLS certificate bundle into the ELK git repository on the remote host
+      ansible.builtin.unarchive:
+        src: "./tls/kibana-tls.tgz"
+        dest: "/home/ctf/{{ elk_git_repo_name }}/kibana/config/"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+
+    - name: Copy CA certificate to Elasticsearch, Logstash, and Kibana directories on the remote host
+      ansible.builtin.copy:
+        src: ./tls/ca/ca.crt
+        dest: "{{ item }}"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+      loop: 
+        - "/home/ctf/{{ elk_git_repo_name }}/es01/config/elasticsearch-tls/"
+        - "/home/ctf/{{ elk_git_repo_name }}/es02/config/elasticsearch-tls/"
+        - "/home/ctf/{{ elk_git_repo_name }}/es03/config/elasticsearch-tls/"  
+        - "/home/ctf/{{ elk_git_repo_name }}/logstash/config/logstash-tls/"
+        - "/home/ctf/{{ elk_git_repo_name }}/kibana/config/kibana-tls/"
+
+    - name: Build ELK images (es01, es02, es03, logstash, and kibana) and start containers
+      community.docker.docker_compose:
+        project_src: "/home/ctf/{{ elk_git_repo_name }}/"
+        build: yes
+        nocache: yes
+        state: present
+      register: output
+
+    - ansible.builtin.debug:
+        var: output 
+        
+
+    

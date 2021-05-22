@@ -1,0 +1,33 @@
+# es03 config
+
+cluster.name: "ctf-cluster"
+network.host: 0.0.0.0
+node.name: es03
+discovery.seed_hosts: es01,es02
+cluster.initial_master_nodes: es01,es02,es03
+bootstrap.memory_lock: true
+
+## X-Pack settings
+## see https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-xpack.html
+#
+xpack.license.self_generated.type: basic
+xpack.security.enabled: true
+xpack.monitoring.collection.enabled: true
+
+## Communications between nodes in a cluster
+## see https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls.html#tls-transport
+#
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/elasticsearch-tls/es-transport-key.pem 
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/elasticsearch-tls/es-transport.crt
+xpack.security.transport.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/elasticsearch-tls/ca.crt" ] 
+
+
+# This turns on SSL for the HTTP (REST) interface
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/elasticsearch-tls/es-http-key.pem 
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/elasticsearch-tls/es-http.crt
+xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/elasticsearch-tls/ca.crt" ] 
+
+

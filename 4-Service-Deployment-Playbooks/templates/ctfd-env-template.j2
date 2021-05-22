@@ -1,0 +1,12 @@
+
+# CTFd Parameters
+CTFD_SECRET_KEY={{ lookup('community.general.lastpass', 'ctf_ctfd_secret_key', field='password') }}
+
+# MariaDB (MySQL Server Parameters)
+MYSQL_DATABASE_URL=mysql+pymysql://{{ lookup('community.general.lastpass', 'ctf_mysql_account', field='username') }}:{{ lookup('community.general.lastpass', 'ctf_mysql_account', field='password') }}@db/ctfd
+MYSQL_ROOT_PASSWORD={{ lookup('community.general.lastpass', 'ctf_mysql_root_pass', field='password') }}
+MYSQL_USER={{ lookup('community.general.lastpass', 'ctf_mysql_account', field='username') }}
+MYSQL_PASSWORD={{ lookup('community.general.lastpass', 'ctf_mysql_account', field='password') }}
+MYSQL_DATABASE=ctfd
+
+

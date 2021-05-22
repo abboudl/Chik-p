@@ -1,0 +1,10 @@
+- hosts: elk
+  user: ansible
+  become: yes
+
+  tasks:
+  - name: Increase vm.max_map_count to accomodate to satisfy elasticsearch requirement.
+    ansible.posix.sysctl:
+      name: vm.max_map_count
+      value: '262144'
+      state: present

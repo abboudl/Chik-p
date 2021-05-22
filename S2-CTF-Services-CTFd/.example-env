@@ -1,0 +1,12 @@
+
+# CTFd Parameters
+CTFD_SECRET_KEY=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+# MariaDB (MySQL Server Parameters)
+MYSQL_DATABASE_URL=mysql+pymysql://ctfd:ctfd@db/ctfd
+MYSQL_ROOT_PASSWORD=iamgroot
+MYSQL_USER=ctfd
+MYSQL_PASSWORD=ctfd
+MYSQL_DATABASE=ctfd
+
+

@@ -1,0 +1,6 @@
+.env
+*.pem
+*.p12
+*.crt
+*.csr
+*tls/

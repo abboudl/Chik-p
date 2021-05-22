@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  haproxy:
+    container_name: ctf-haproxy
+    image: ctf-haproxy:2.3
+    build: ./haproxy/
+    environment:
+      STATS_PANEL_USERNAME: $STATS_PANEL_USERNAME
+      STATS_PANEL_PASSWORD: $STATS_PANEL_PASSWORD
+    network_mode: "host"
+
