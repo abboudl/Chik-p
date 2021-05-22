@@ -13,7 +13,9 @@ Chik-p has supported several GTA-based CTFs including **ISSessionsCTF2021** and 
 
 ## Template Repository
 
-We recognize that every CTF has its unique needs. Our #1 goal is to provide a strong starting point that CTF organizers can build on which is why this project is provided as a **Template** Github repository. 
+We recognize that every CTF has its unique needs. Our #1 goal is to provide a strong starting point that CTF organizers can build on which is why this project is provided as a **Template** Github repository.
+
+Simply click the green **"Use This Template"** button to copy this repository to your Github account.
 
 ## Project Status
 
@@ -45,34 +47,37 @@ Finally, Chikpea's architecture assumes a **100% online CTF**.
 
 ## Project Organization
 
-This Github repository contains a number of **submodules (i.e. other Git repositories)** that perform a very specific function in Chik-p's overall build process. There are three types of repositories: **Infrastructure Deployment Repositories**, **Service Repositories**, and **Example Challenge Development Repositories**.
+This Github repository contains a number of **modules** that perform a very specific function in Chik-p's overall build process. These modules are stored in dedicated subdirectories. There are two types of modules: **Infrastructure Deployment Modules** and **Service Modules**.
 
-Infrastructure Deployment Repositories are meant to be read sequentially (i.e. 0-4). Each has a README containing a set of instructions and project documentation. They also contain **bash**, **gcloud**, and **Ansible** scripts and playbooks that drive a specific logical component of the build process. The Infrastructure Deployment repositories are:
+Infrastructure Deployment modules are meant to be explored sequentially (i.e. 0-4). Each has a **README** containing a set of instructions and project documentation. They also contain **bash**, **gcloud**, and **Ansible** scripts that drive a specific logical component of the build process. The  are:
 - **0-CTF-Infra-Initial-Setup:** explains how to generate credentials, how to set up a GCP project, and how create an administration VM for your CTF. Provides a number of helper scripts.
 - **1-CTF-Infra-GCloud-Build-Scripts:** Contains a set of gcloud scripts that lay the foundation for your CTF by provisioning cloud resources such as hosts, GKE clusters, IP addresses, firewall rules, etc. 
 - **2-CTF-Infra-Wireguard-VPN-Setup:** Contains a docker image of a Wireguard VPN as well as Ansible playbooks to provision the Wireguard VM and deploy the Wireguard service. 
-- **3-CTF-Infra-Host-Configuration-Playbooks:** Contains Ansible playbooks to configure hosts prior to service deployment by installing needed packages (docker, docker-compose,the stackdriver cloud monitoring agent, etc.), transferring credentials (SSH Keys), and manipulation system properties. 
-- **4-CTF-Infra-Service-Deployment-Playbooks:** Contains Ansible playbooks that deploy services stored in *Service Repositories* on Github (CTFd, ELK, HAProxy, and Nginx).
+- **3-CTF-Infra-Host-Configuration-Playbooks:** Contains Ansible playbooks to configure hosts prior to service deployment by installing needed packages, transferring credentials (SSH Keys), and manipulating system properties. 
+- **4-CTF-Infra-Service-Deployment-Playbooks:** Contains Ansible playbooks that deploy services stored in *Service Modules* (CTFd, ELK, HAProxy, and Nginx).
 
-Service Repositories contains one or more related services to be deployed once cloud resource provisioning and host configuration has completed. The Service Repositories are:
+Service Modules contains one or more related services to be deployed once cloud resource provisioning and host configuration processes have completed. They are:
 - **S1-CTF-Services-ELK:** contains docker images for a 3-node elasticsearch cluster, logstash, and Kibana.
 - **S2-CTF-Services-CTFd:** contains vanilla CTFd alongside a filebeat sidecar container. 
 - **S3-CTF-Services-Nginx:** contains an Nginx Docker image alongside a filebeat sidecar container.
 - **S4-CTF-Services-HAProxy:** contains a HAProxy Docker image.
 
-Example Challenge Development Repositories provide an example organizational structure for file-based and hosted challenges. The Example Challenge Development Repositories are:
+Finally, there are two example challenge development repositories (linked as Git submodules). They provide an example organizational structure for challenge development. They are:
 - **File-Based-Challenge-Dev**
 - **Hosted-Challenge-Dev**
 
-**Chik-p** is divided into **12 repositories** (including this one) to:
+These repositories are also provided as **templates**.
+
+**Chik-p** is divided into **modules** to:
 - Simplify the maintenance of each individual logical component
 - Allow us to swap services and build scripts in and out easily so long as they fulfill their abstract objective (for example, one can swap Wireguard for OpenVPN or gcloud for Terraform and still maintain the objectives of providing secure access and provisioning cloud resources, respectively).
 - Clarify where a particular piece of code that *could* go anywhere *should* go 
 - To make it easy to pick and choose which components to use if you do not wish to use all of them.
+- To make documentation extra clear!
 
 ## Infrastructure Build Roadmap
 
-1. **0-CTF-Infra-Initial-Setup**
+1. **0-Initial-Setup**
     - Create a template of all Chik-p repositories.
     - Create a GCP project for your CTF
     - Set up a CTF Administration VM
@@ -81,13 +86,13 @@ Example Challenge Development Repositories provide an example organizational str
     - Generate SSH Keys for CTF operating system accounts
 2. **Configure Services in Service Repositories**
     - Review and complete all items in the **Pre-Deployment Prerequisites** section in Service Repositories.
-3. **1-CTF-Infra-GCloud-Build-Scripts**
+3. **1-GCloud-Build-Scripts**
     - Run gcloud scripts to privision cloud resources and set up the CTF's foundation (hosts, IPs, Firewall rules, etc.)
     - Configure DNS A Records for Internet-facing Hosts (VPN Host, Nginx Host, and HAProxy Host).
-4. **2-CTF-Infra-Wireguard-VPN-Setup**
+4. **2-Wireguard-VPN-Setup**
     - Run Ansible playbooks to configure Wireguard VPN host with prerequisites for service deployment (install required packages, credentials, etc.)
     - Run an Ansible playbook to deploy the Wireguard service
-5. **3-CTF-Infra-Host-Configuration-Playbooks**
+5. **3-Host-Configuration-Playbooks**
     - Connect to the Wireguard VPN
     - Run Ansible playbooks to configure CTFd, Nginx, HAProxy, and ELK hosts with prerequisites for service deployment (install required packages, credentials, etc.)
     - Run Ansible playbooks to deploy the CTFd, Nginx, HAProxy, and ELK services
