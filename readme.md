@@ -108,7 +108,7 @@ They are:
 - Kurt **K**osubek
 - Jamie **P**augh
 
-Taking the first letter of each of their last names, you get **Chik-p** (pronouced "Chickpea"). Chickpeas are the main ingredient in **hummus, a heavenly substance** and the subject of many of our conversations. I can honestly say that these five chickpeas make my life taste like hummus every day. **- Louai Abboud**
+Taking the first letter of each of their last names, you get **Chik-p** (prononuced "Chickpea"). Chickpeas are the main ingredient in **hummus, a heavenly substance** and the subject of many of our conversations. I can honestly say that these five chickpeas make my life taste like hummus every day. **- Louai Abboud**
 
 ## Credits
 
