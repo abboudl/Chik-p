@@ -77,11 +77,12 @@ Internal Subnet.
 
 During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to CTFd that must be set up in lastpass prior to the <automated infrastructure build process>.
 
-| Account/Credential       | LastPass Credential Name        | Description                                                                          |
-| -------------------------|---------------------------------|--------------------------------------------------------------------------------------|
-| ctfd secret key          | ctf_ctfd_secret_key             | 64-character secret key. Used by the CTFd Flask application to sign session cookies for protection against cookie data tampering.                                 |
-| mysql account            | ctf_mysql_account               | Username and password are set by the CTF Infrastructure Administrator. This account is used by CTFd's object relational mapper (ORM) to populate the ctfd database. It can also be used by the CTF Administrator to manually manage the Mariadb MySQL database if needed.|
-| mysql root password      | ctf_mysql_root_pass             | Root password to the MySQL DBMS. Username is "root".
+## CTFd Accounts
+| LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
+|---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
+| ctf_ctfd_secret_key             | 64-Character Secret Key  | ctf_ctfd_secret_key | Used by the CTFd Flask application to sign session cookies for protection against cookie data tampering. |
+| ctf_mysql_account               | 16+ Character Password                 | *pick-a-username*   | Username and password are set by the CTF Infrastructure Administrator. This account is used by CTFd's object relational mapper (ORM) to populate the ctfd database. It can also be used by the CTF Administrator to manually manage the Mariadb MySQL database if needed.|
+| ctf_mysql_root_pass             | 16+ Character Password                 | root                | Root password to the MySQL DBMS. Username is "root".                                                     |
 
 ### Pre-Deployment Configuration Checklist
 
