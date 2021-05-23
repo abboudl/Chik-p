@@ -3,13 +3,14 @@ The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and E
 - install `docker` and `docker-compose`
 - install the GCP stackdriver agent to enable detailed resource consumption analytics (Ex: CPU, memory, and disk utilization).
 - create the `ctf` account on each host and set its password.
-- upload the `ctf` user's public key (`~/.ssh/ctf.pub`) to `/home/ctf/.ssh/authorized_keys` so that we can login as this user from the Management VM
-- upload the CTF Github repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
+- upload the `ctf` user's public key (`~/.ssh/ctf.pub`) to `/home/ctf/.ssh/authorized_keys` so that Ansible as well as the CTF Infrastructure Administrator can login as this user from the Management VM
+- upload the Github repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
 
-Specifically for the ELK VM, a playbook increases
+Specifically for the ELK VM, the `4-configure-elk-vm.yml` playbook increases the system's vm.max_map_count to 262144 to satisfy an Elasticsearch requirement for production clusters. 
 
 ## Prerequisites
-
+1. All prerequisites from earlier stages.
+2. You can successfully connect to the Wireguard VPN.
 
 ## Step-by-Step Instructions 
 
@@ -66,7 +67,7 @@ ssh-add ~/.ssh/ansible
 
 ### Step #4: Set Ansible's Target Hosts in `inventory.yml` 
 
-Ansible's `inventory.yml` file allows us to groups hosts by some property: location, organizational unit, production vs. testing, etc to allow us to perform the same action against a set of hosts. In this case, we divide hosts by subnet. We also create a group for each individual host to remove the need to edit every playbook individually if a hostname or IP changes (This is generally bad practice but in this case, our environment is small so it doesn't matter too much). We then point playbooks either to a single host, all hosts in a single subnet or all hosts in multiple subnets.
+Ansible's `inventory.yml` file allows us to groups hosts by some property: location, organizational unit, production vs. testing, etc to allow us to perform the same action against a group. In this case, we divide hosts by subnet. We also create a group for each individual host to remove the need to edit every playbook individually if a hostname or IP changes (This is generally bad practice but in this case, our environment is small so it doesn't matter too much). We then point playbooks either to a single host, all hosts in a single subnet or all hosts in multiple subnets.
 ```
 all:
   children:
@@ -93,19 +94,20 @@ all:
 
 ```
 
-For example, in this playbook, we tell Ansible to run this playbook on all hosts in the DMZ subnet as well as the internal subnet under the security context of the `ansible` user.
+For example,we tell Ansible to run this playbook on all hosts in the DMZ subnet as well as the internal subnet.
 ```
 - hosts: dmz:internal
   user: ansible
   become: yes
 ```
 
-Your must edit the groups in the `inventory.yml` file to match the IP addresses or fully qualified domain names you assigned the CTFd, ELK, HAproxy, and Nginx hosts in `config.sh` in [1-CTF-Infra-GCloud-Build-Scripts](https://github.com/abboudl/1-CTF-Infra-GCloud-Build-Scripts/).
+Your must edit the groups in the `inventory.yml` file to match the IP addresses or fully qualified domain names you assigned the CTFd, ELK, HAproxy, and Nginx hosts in `config.sh` in the **Cloud Resource Provisioning Stage.**
 
+Finally, if you chose not to deploy all hosts - for example, if you decided that you do not need ELK or HAProxy - you also need to narrow down the `hosts` key in each playbook. By default, most playbooks target all hosts in the DMZ and Internal subnets.
 
 ### Step #5: Run Ansible Playbooks
 
-You're all set; it's time to run the Ansible host configuration playbooks:
+You're all set! It's time to run the Ansible host configuration playbooks:
 
 ```
 ansible-playbook 0-install-docker.yml -i inventory.yml
@@ -121,9 +123,14 @@ chmod 700 run-all-playbooks.sh
 ./run-all-playbooks.sh
 ```
 
-**Important:** A description of each playbook's task can be found in the playbook itself.
+### How can I find out exactly what a notebook does?
+You can find out exactly what a playbook does by simply opening it and reading the `name` key for each task.
 
+### What do I do if a task fails?
+- Go back through your configs. Search for logic errors and spelling mistakes.
+- Don't worry about removing partial work. Ansible playbooks are idempotent meaning that running the same playbook over and over again will always result in the same end state.
 
 ## Next Steps
+If Ansible reports no "failed" tasks, you are ready to proceed to the **Service Deployment Stage**.
 
 
