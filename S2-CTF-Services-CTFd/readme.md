@@ -67,7 +67,7 @@ By default, CTFd limits flag submissions to 10 per minute per team.
 
 ## Deployment
 
-See [ctfd-env-template.j2](../4-Service-Deployment-Stage/templates/ctfd-env-template.j2) and [3-deploy-ctfd.yml](../4-Service-Deployment-Stage/3-deploy-ctfd.yml) to understand how CTFd is deployed. 
+See [ctfd-env-template.j2](../4-Service-Deployment-Stage/templates/ctfd-env-template.j2) and [4-deploy-ctfd.yml](../4-Service-Deployment-Stage/4-deploy-ctfd.yml) to understand how CTFd is deployed. 
 
 ### Network Location
 
