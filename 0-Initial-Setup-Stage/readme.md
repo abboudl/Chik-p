@@ -40,6 +40,9 @@ The `ctf` user is created and its public key is uploaded to each host in the CTF
 ### How do I generate SSH keys for these accounts?
 We will show you! SSH keys for the Gcloud Service Account, the CTF Github Account, the `ansible` user, and the `ctf` user will be generated in the **Initial Setup Stage** (as in very soon).
 
+### Are there any other accounts?
+Oh yes! Plenty! There are accounts associated with every service (CTFd, ELK, etc.). We leave a discussion of each of these account to each service's dedicated readme.
+
 ## **Objective #1: Create a LastPass Account for the CTF**
 
 LastPass will store CTF credentials. These credentials will be pulled dynamically by Ansible during the infrastructure build process (using the `lpass` commandline utility). And in doing so, we mitigate the risk of accidentally committing passwords to Github repositories or hardcoding them in our code.
