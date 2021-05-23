@@ -110,6 +110,7 @@ Finally, if you chose not to deploy all hosts - for example, if you decided that
 You're all set! It's time to run the Ansible host configuration playbooks:
 
 ```
+cd 3-Host-Configuration-Stage/
 ansible-playbook 0-install-docker.yml -i inventory.yml
 ansible-playbook 1-install-docker-compose.yml -i inventory.yml
 ansible-playbook 2-install-stackdriver-agent.yml -i inventory.yml
@@ -119,6 +120,7 @@ ansible-playbook 4-configure-elk-vm.yml -i inventory.yml
 
 or to simply run all playbooks:
 ```
+cd 3-Host-Configuration-Stage/
 chmod 700 run-all-playbooks.sh
 ./run-all-playbooks.sh
 ```
