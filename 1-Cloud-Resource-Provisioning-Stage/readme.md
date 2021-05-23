@@ -22,9 +22,8 @@ Each script in the Cloud Resource Provisioning Stage describes a modular logical
 3. **The Scoreboard Component**: provisions resources associated with the CTF scoreboard and file-based challenges (as opposed to hosted challenges) such as the CTFd host and the Nginx proxy. Implemented by: `3-build-scoreboard-component.sh`. 
 4. **The Monitoring Component**: provisions resources related to CTF logging and monitoring such as the ELK host. Implemented by: `4-build-monitoring-component.sh`.
 5. **The Hosted Challenges Component**: provisions resources related to hosted challenges such as the GKE Kubernetes cluster and the HAProxy host. Implemented by: `5-build-hosted-challenges-component.sh`. 
-<br />
 
-### Modular Components**
+### Modular Components
 
 The scripts are numbered by **order of execution**, however the CTF infrastructure administrator need not use all components at once or at all. At the moment, the following configurations are viable:
 - **Full Platter**: run all scripts.
