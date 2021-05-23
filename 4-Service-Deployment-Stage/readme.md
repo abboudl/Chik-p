@@ -1,13 +1,21 @@
-## Purpose
-
+## Objective
+The Ansible playbooks in this repository deploy the CTFd, Nginx, HAProxy, and ELK containers to their respective host. On the CTF administration VM, they:
+- Create a Certificate Authority (CA) for the CTF environment and generate TLS certificates for all services
+- (Optional) Use Certbot's Cloudflare plugin to request a LetsEncypt certificate for the scoreboard
+Then on each remote host, they:
+- Clone the Chik-p Github respoitory
+- Pull the relevant service's secrets from LastPass to create a `.env` secrets file
+- Transfer the `.env` secrets file to that service's folder on the remote host where it can be read by `docker-compose`. For example, `/home/ctf/Chik-p/S1-CTF-Services-ELK/`.
+- Transfer any needed TLS certificates that service's folder into the proper location expected by that service's `Dockerfile`.
+- Build the service's `docker` image and start the container.
 
 ## Prerequisites
-
+1. All prerequisites from earlier stages.
+2. You can successfully connect to the Wireguard VPN.
 
 ## Step-by-Step Instructions 
 
 All commands must be executed on the CTF Administration machine.
-
 ### Step #1: Connect to the Wireguard VPN
 
 Before running the playbooks in this repository, you must be connected to the CTF's virtual private network on GCP using the Wireguard VPN. Otherwise, you will not be able to reach non-internet-facing hosts such as the ELK host and the CTFd host.  
