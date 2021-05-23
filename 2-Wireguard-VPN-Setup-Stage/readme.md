@@ -13,6 +13,8 @@ Wireguard VPN is used to provide the CTF infrastructure administrator(s) with a 
 
 ## Wireguard Setup Instructions
 
+All commands must be run on the CTF Management VM.
+
 ### Step #1: Set the `SERVERURL` Parameter in the Wireguard Configuration
 
 Change directories into the **2-Wireguard-VPN-Setup-Stage** directory.
@@ -115,7 +117,7 @@ docker container ls
 Retrieve the client config and move it to `/etc/wireguard` on the administration VM.
 
 ```
-scp ctf@<your_vpn_public_domain>:/home/ctf/2-CTF-Infra-Wireguard-VPN-Setup/config/peer1/peer1.conf /tmp/peer1.conf
+scp ctf@<your_vpn_public_domain>:/home/ctf/Chik-p/2-Wireguard-VPN-Setup-Stage/config/peer1/peer1.conf /tmp/peer1.conf
 sudo mv /tmp/peer1.conf /etc/wireguard/wg0.conf
 ```
 ### Step #8: Start Wireguard VPN
@@ -145,7 +147,7 @@ sudo service wg-quick@wg0 stop
 
 ## Wireguard Server and Client Configs
 
-Wireguard client and server configuration files can be found in `~/2-CTF-Infra-Wireguard-VPN-Setup/config/` on the Wireguard host. 
+Wireguard client and server configuration files can be found in `/home/ctf/Chik-p/2-Wireguard-VPN-Setup-Stage/config/` on the Wireguard host. 
 
 ## Next Steps
 
