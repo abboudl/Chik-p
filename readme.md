@@ -22,7 +22,7 @@ Simply click the green **"Use This Template"** button to copy this repository to
 This project is **very new and under active development**. As such, please aggressively test configurations before using them in production. We will make our best effort to keep the `main` branch stable and ready for use.
 
 ## Student Project
-Chik-p is a project created by Information Security students at Sheridan College in Canada, specifically members of ISSessions, a student-led cybersecurity community! We welcome and appreciate all feedback. If you see any problems or recommendations, please open an issue to let us know :)
+Chik-p is a project created by Information Security students at Sheridan College in Canada, specifically members of ISSessions, a student-led cybersecurity community! We welcome and appreciate all feedback. If you see any problems or have any recommendations, please open an issue to let us know :)
 
 ## Architecture
 
