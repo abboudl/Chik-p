@@ -247,6 +247,7 @@ And to tear it down, run:
 
 If your public domain is behind Cloudflare, we recommend not proxying connections through Cloudflare servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users even though the Cloudflare protection level was set to the lowest possible setting.
 
+<br />
 
 ## Next Steps
 Once you have deployed your desired components successfully, you are ready to proceed to the **2-Wireguard-VPN-Setup-Stage**.
