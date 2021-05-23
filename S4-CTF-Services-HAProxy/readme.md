@@ -54,9 +54,9 @@ DMZ Subnet.
 
 During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to HAProxy that must be set up in lastpass prior to the <automated infrastructure build process>.
 
-| Account/Credential       | LastPass Credential Name        | Description                                                                          |
-| -------------------------|---------------------------------|--------------------------------------------------------------------------------------|
-| haproxy stats panel acct | ctf_haproxy_stats_panel_account | Username and password are set by the CTF Infrastructure Administrator. Provides access to a dashboard exposed on port 8080 for monitoring hosted challenges (bruteforcing, excessive # of connections, etc.) |
+| LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
+|---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
+| ctf_haproxy_stats_panel_account | 16+ Character Password                 | *pick-a-username*   | Username and password are set by the CTF Infrastructure Administrator. Provides access to a dashboard exposed on port 8080 for monitoring hosted challenges (bruteforcing, excessive # of connections, etc.) |                                                                                                         |
 
 ### Pre-Deployment Configuration Checklist
 1. Generate secrets related to HAProxy and store them in a LastPass password vault (See "Important Accounts, Credentials, and Secrets" above.)
