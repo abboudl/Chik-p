@@ -1,9 +1,12 @@
 ## Objective
-The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and ELK hosts for service deployment by:
-- installing `docker` and `docker-compose`
-- installing the GCP stackdriver monitoring agent
-- creating the `ctf` account on each host
-- 
+The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and ELK hosts for service deployment. On each host, they:
+- install `docker` and `docker-compose`
+- install the GCP stackdriver agent to enable detailed resource consumption analytics (Ex: CPU, memory, and disk utilization).
+- create the `ctf` account on each host and set its password.
+- upload the `ctf` user's public key (`~/.ssh/ctf.pub`) to `/home/ctf/.ssh/authorized_keys` so that we can login as this user from the Management VM
+- upload the CTF Github repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
+
+Specifically for the ELK VM, a playbook increases
 
 ## Prerequisites
 
