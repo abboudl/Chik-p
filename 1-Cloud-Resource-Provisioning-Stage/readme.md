@@ -7,18 +7,16 @@ The scripts in this repository provide the ability to programatically provision 
 **Important:** the scripts in this repository provision the hardware and cloud resources that services such as CTFd, Nginx, and HaProxy rely on, BUT they do not deploy these services themselves. A deployment guide for each of these services is provided in later stages. 
 
 ## Prerequisites
+Ensure you have successfully completed all objectives in **0-Initial-Setup-Stage**. Most importantly, `~/.ssh/ansible` and `~/.ssh/ansible.pub` must have been created and the GCloud Service Account should have been activated using `0-admin-account-setup.sh`.
 
-### Initial Setup Steps
-Ensure you have successfully completed all objectives in **0-Initial-Setup-Stage**. Most importantly, `~/.ssh/ansible` must have been created and the GCloud Service Account should have been activated using `0-admin-account-setup.sh`.
-
-You can check is the which Gcloud service account is active using:
+You can check which Gcloud service account is active using:
 ```
 gcloud config list
 ```
 
 ## Script Organization
 
-Each script describes a modular logical component in a traditional CTF environment including:
+Each script in the Cloud Resource Provisioning Stage describes a modular logical component in a traditional CTF environment including:
 1. **The Network Component**: provisions a virtual private cloud (VPC) network, subnets, basic firewall rules, DNS zones, etc. This is the base component for all other scripts. Implemented by: `1-build-network-component.sh`. 
 2. **The VPN Componet**: provisions resources associated with a VPN gateway such as the Wireguard host providing administrators access to the environment. Implemented by: `2-build-vpn-component.sh`. 
 3. **The Scoreboard Component**: provisions resources associated with the CTF scoreboard and file-based challenges (as opposed to hosted challenges) such as the CTFd host and the Nginx proxy. Implemented by: `3-build-scoreboard-component.sh`. 
@@ -36,18 +34,28 @@ The scripts are numbered by **order of execution**, however the CTF infrastructu
 Finally, there is nothing stopping the CTF infrastructure administrator(s) from **modifying a component** or **adding new components** to suit their needs. In fact, this is expected and recommended. 
 
 ## Deployment Order
-You should know that GCP resources are often dependent on each other. As such, when building infrastructure run scripts **in ascending order**. When tearing down infrastructure, run in scripts in **descending order**.
+You should know that GCP resources are often dependent on each other. As such, when building the infrastructure, run scripts **in ascending order**. When tearing down infrastructure, run in scripts in **descending order**.
 <br />
 
-## Script Usage Example
+## Step-by-Step Instructions: Cloud Resource Provisioning Process
 
-### Configuration and Customization
-The `config.sh` file is imported by all other scripts in the repository. It gives the CTF infrastructure administrator(s) the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided inside `config.sh`.
+### Configure and Customize the Deployment
+The `config.sh` file is imported by all other scripts in the repository. It gives the CTF Infrastructure Administrator the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided inside `config.sh`.
 <br />
 
-Before running any scripts, open `config.sh` and edit the value of ****
+1. Open `config.sh` and edit the value of **ANSIBLE_PUBLIC_KEY_PATH** to point to the path of the ansible public key on disk. If you followed the instructions in **0-Initial-Setup-Stage**, this should be its path: `~/.ssh/ansible.pub`.
+2. Edit other parameters as needed. Note that:
+  1. You may wish to change domain names.
+  2. You may wish to give VMs more or less resources.
+  3. You may wish to upgrade the OS images in use.
+3. Run scripts in ascending order. Select only the components you wish to build (See the "Modular Components" section). 
 
-Every script has two switches, an **up** switch and a **down** switch. The **up** switch builds infrastructure, whereas the **down** switch tears them down. For example, to build the vpn component, run:
+Go into the 1-Cloud-Resource-Provisioning-Stage directory:
+```
+cd 1-Cloud-Resource-Provisioning-Stage
+```
+
+Every script has two switches, an **up** switch and a **down** switch. The **up** switch builds infrastructure, whereas the **down** switch tears them down.  For example, to build the vpn component, run:
 
 ```
 2-build-vpn-component.sh up
@@ -240,3 +248,6 @@ And to tear it down, run:
 
 If your public domain is behind Cloudflare, we recommend not proxying connections through Cloudflare servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users even though the Cloudflare protection level was set to the lowest possible setting.
 
+
+## Next Steps
+Once you have deployed your desired components successfully, you are ready to proceed to the **2-Wireguard-VPN-Setup-Stage**.
