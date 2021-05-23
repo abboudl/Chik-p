@@ -26,7 +26,7 @@ For the infrastructure build process to succeed, Lastpass must be seeded with th
 | LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
 |---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
 | ctf_ctfd_secret_key             | 64-Character Secret Key  | ctf_ctfd_secret_key | Used by the CTFd Flask application to sign session cookies for protection against cookie data tampering. |
-| ctf_mysql_account               | 16+ Character Password                 | <pick-a-username>   | Username and password are set by the CTF Infrastructure Administrator. This account is used by CTFd's object relational mapper (ORM) to populate the ctfd database. It can also be used by the CTF Administrator to manually manage the Mariadb MySQL database if needed.|
+| ctf_mysql_account               | 16+ Character Password                 | *pick-a-username*   | Username and password are set by the CTF Infrastructure Administrator. This account is used by CTFd's object relational mapper (ORM) to populate the ctfd database. It can also be used by the CTF Administrator to manually manage the Mariadb MySQL database if needed.|
 | ctf_mysql_root_pass             | 16+ Character Password                 | root                | Root password to the MySQL DBMS. Username is "root".                                                     |
 
 ## Nginx Accounts
@@ -35,7 +35,7 @@ None.
 ## HAProxy
 | LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
 |---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
-| ctf_haproxy_stats_panel_account | 16+ Character Password                 | <pick-a-username>   | Username and password are set by the CTF Infrastructure Administrator. Provides access to a dashboard exposed on port 8080 for monitoring hosted challenges (bruteforcing, excessive # of connections, etc.) |                                                                                                         |
+| ctf_haproxy_stats_panel_account | 16+ Character Password                 | *pick-a-username*   | Username and password are set by the CTF Infrastructure Administrator. Provides access to a dashboard exposed on port 8080 for monitoring hosted challenges (bruteforcing, excessive # of connections, etc.) |                                                                                                         |
 
 ## Cloudflare (If Applicable)
 | Account/Credential           | Secret Type | LastPass Credential Name        | Description                                                                          |
