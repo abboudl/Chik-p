@@ -280,7 +280,7 @@ LastPass will store CTF credentials. These credentials will be pulled dynamicall
 
 Installing LastPass is easy. If you need help, follow the instructions in this [video](https://www.youtube.com/watch?v=PDVJR7RXvzs). Don't forget to choose a **strong MEMORABLE Master Password** and enable **Multi-Factor-Authentication (MFA)**.
 
-Next, seed it with the credentials itemized in this account [catalog] (lastpass-account-catalog.md).
+Next, seed it with the credentials itemized in this account [catalog](lastpass-account-catalog.md).
 
 ## Next Steps
 Proceed to the **Cloud Resource Provisioning Stage**.
