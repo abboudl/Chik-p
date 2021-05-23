@@ -98,7 +98,7 @@ The CTF Management VM is used to deploy and manage CTF infrastructure.
 A local Ubuntu Linux VM with 2 CPUs, 6-8GB of RAM, and a 100GB of storage space is strongly recommended.
 
 
-### 0-admin-machine-setup.sh
+### Install Deployment Tools
 
 This bash script will install all required utilities including:
 1. docker
@@ -110,14 +110,14 @@ This bash script will install all required utilities including:
 7. certbot
 8. ctfcli
 
-### Step #1: Clone This Repository
+#### Step #1: Clone This Repository
 
 ```
 git clone <repo_url>
 cd 0-Initial-Setup-Stage/
 ```
 
-### Step #2: Run `0-admin-machine-setup.sh`
+#### Step #2: Run `0-admin-machine-setup.sh`
 
 1. Make the script executable.
 
@@ -131,8 +131,29 @@ chmod 700 0-admin-machine-setup.sh
 ./0-admin-machine-setup.sh
 ```
 
-4. If the script runs without errors, you have all the tools you need!
+3. If the script runs without errors, you have all the deployment tools you need (gcloud, Ansible, etc.)!
 
+
+### Install Wireguard VPN Client 
+
+#### Step #1: Install Wireguard package
+
+```
+sudo apt update && sudo apt upgrade
+sudo apt install wireguard
+```
+
+#### Step #2: Generate your personal Wireguard public and private keys
+
+```
+$ sudo -i
+# cd /etc/wireguard
+# umask 077
+# sudo wg genkey > private-key
+# sudo wg pubkey > public-key < private
+```
+
+In the **Wireguard VPN Setup Stage**, we will set up a Wireguard VPN Server on GCP and create a client config.
 
 ## **Objective #4: Create a Gcloud Service Account and Activate it**
 
@@ -141,6 +162,7 @@ Complete the following steps on the CTF Infrastructure Administrator's managemen
 ### **Step #1: Create a Service Account for the CTF Infrastructure Project.**
 
 - This account will be used to provision cloud resources (such as Google Compute Engine VMs) programmatically.
+- Go back to the Google Cloud Console
 - Search for **"Service Accounts"** in the Search Bar of the Google Cloud Console.
   - Fill in the form with the following parameters:
     - **Service Account Name**: ctf-infra-manager
