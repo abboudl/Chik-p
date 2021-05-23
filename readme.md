@@ -21,6 +21,9 @@ Simply click the green **"Use This Template"** button to copy this repository to
 
 This project is **very new and under active development**. As such, please aggressively test configurations before using them in production. We will make our best effort to keep the `main` branch stable and ready for use.
 
+## Student Project
+Chik-p is a project created by Information Security students at Sheridan College in Canada, specifically members of ISSessions, a student-led cybersecurity community! We welcome and appreciate all feedback. If you see any problems or recommendations, please open an issue to let us know :)
+
 ## Architecture
 
 Chik-p is deployed using a combination of `gcloud` and `Ansible` to Google Cloud Platform (GCP). It leverages existing services and cloud resources including:
@@ -43,7 +46,7 @@ Credentials are stored in (and pulled from) a LastPass password vault using the 
 
 The entire infrastructure build process is driven by a **CTF Infrastructure Administrator** who executes scripts and deployes services from a dedicated **Management VM.**
 
-Finally, Chikpea's architecture assumes a **100% online CTF**.
+Finally, Chikpea's architecture assumes a **100% online CTF** (i.e. not on-premises and not behind a VPN).
 
 ## Project Organization
 
