@@ -17,10 +17,10 @@ Then on each remote host, they:
 
 All commands must be executed on the CTF Administration VM.
 
-### Step #1: Go to each Service's Folder and Complete the Steps under Pre-Deployment Prerequisites
+### Step #1: Go to each Service's Folder and Complete the Steps under "Pre-Deployment Configuration Checklist"
 1. Go to each service's folder (Ex: S1-CTF-Services-ELK).
 2. Spend some reading the service's documentation
-3. Before proceeding to step #2, complete the steps under "Pre-Deployment Prerequisites" and save your changes by committing to your private Chik-p Github repository.
+3. Before proceeding to step #2, complete the steps under "Pre-Deployment Configuration Checklist" and save your changes by committing to your private Chik-p Github repository.
 
 ### Step #2: Connect to the Wireguard VPN
 
@@ -181,7 +181,7 @@ The Infrastructure Build Process is complete.
 1. Verify that you can connect to CTFd in a browser. Using the current configuration as an example, we would visit `https://ctf.issessions.ca`.
 2. Verify that you can connect to Kibana in a browser while connected to the VPN. Using the current configuration as an example, we would visit `https://elk.int.ctf.issessions.ca:5601`.
 
-Now it's time for application configuration. Go to each service's dedicated folder and complete the steps under Post-Deployment Steps to prepare each individual service for game day.
+Now it's time for application configuration. Go to each service's dedicated folder and complete the steps under **Post-Deployment Configuration Checklist** to prepare each individual service for game day.
 
 
 
