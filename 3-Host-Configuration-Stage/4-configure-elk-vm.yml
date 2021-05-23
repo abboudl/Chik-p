@@ -3,7 +3,7 @@
   become: yes
 
   tasks:
-  - name: Increase vm.max_map_count to accomodate to satisfy elasticsearch requirement.
+  - name: Increase vm.max_map_count to satisfy an elasticsearch requirement for production clusters.
     ansible.posix.sysctl:
       name: vm.max_map_count
       value: '262144'
