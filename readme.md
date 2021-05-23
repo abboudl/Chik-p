@@ -46,9 +46,11 @@ The CTF's virtual private network (VPC) is divided into three subnets:
 
 Credentials are stored in (and pulled from) a LastPass password vault using the Ansible's `community.general.lastpass` module.
 
-The entire infrastructure build process is driven by a **CTF Infrastructure Administrator** who executes scripts and deployes services from a dedicated **Management VM.**
+Hosted challenge images are pushed to a Google Container Registry (GCP) and then started as Deployments on the GKE cluster.
 
-Finally, Chikpea's architecture assumes a **100% online CTF** (i.e. not on-premises and not behind a VPN).
+Chikpea's architecture assumes a **100% online CTF** (i.e. not on-premises and not behind a VPN).
+
+Finally, the entire infrastructure build process is driven by a **CTF Infrastructure Administrator** who executes scripts and Ansible playbooks to provision cloud resources and deployes services. They perform all of these operations from a dedicated **Management VM.**
 
 ## Project Organization
 
@@ -80,27 +82,30 @@ These repositories are also provided as **templates**.
 - To make it easy to pick and choose which components to use if you do not wish to use all of them.
 - To make documentation extra clear!
 
-## Infrastructure Build Roadmap
+## Infrastructure Build Process
 
 1. **Initial Setup Stage**
-    - Create a template of all Chik-p repositories.
-    - Create a GCP project for your CTF
-    - Set up a CTF Administration VM
-    - Configure gcloud to use your GCP project's service account
-    - Create a LastPass account for your CTF and seed it with credentials
-    - Generate SSH Keys for CTF operating system accounts
+    - Create a Google Account and a Google Cloud Platform (GCP) project for the CTF
+    - Set up the CTF Management VM
+    - Create a Gcloud service account and activate it on the Management VM 
+    - Generate SSH Keys for accounts critical to the success of the infrastructure build process
+    - Create a LastPass account for the CTF infrastructure and seed it with credentials
 3. **Cloud Resource Provisioning Stage**
     - Run gcloud scripts to privision cloud resources and set up the CTF's foundation (hosts, IPs, Firewall rules, etc.)
-    - Configure DNS A Records for Internet-facing Hosts (VPN Host, Nginx Host, and HAProxy Host).
+    - Configure DNS A Records for internet-facing hosts (VPN host, Nginx host, and HAProxy host).
 4. **VPN Setup Stage**
-    - Run Ansible playbooks to configure Wireguard VPN host with prerequisites for service deployment (install required packages, credentials, etc.)
-    - Run an Ansible playbook to deploy the Wireguard service
+    - Run Ansible playbooks to configure the Wireguard VPN host (install required packages, deploy credentials, etc.)
+    - Run an Ansible playbook to deploy the Wireguard service and gain the ability to connect to the CTF's internal network
 5. **Host Configuration Stage**
     - Connect to the Wireguard VPN
-    - Run Ansible playbooks to configure CTFd, Nginx, HAProxy, and ELK hosts with prerequisites for service deployment (install required packages, credentials, etc.)
-    - Run Ansible playbooks to deploy the CTFd, Nginx, HAProxy, and ELK services
+    - Run Ansible playbooks to configure CTFd, Nginx, HAProxy, and ELK hosts with all prerequisites for service deployment (install required packages, deploy credentials, etc.)
 6. **Service Deployment Stage:**
-    - Review and complete all items in the **Pre-Deployment Prerequisites** section in Service Repositories.
+    - Generate TLS Certificates for the CTF environment 
+    - Edit and verify configuration files by following the guidance in the **Pre-Deployment Configuration Checklist** section.
+    - Run Ansible playbooks to deploy CTFd, Nginx, HAProxy, and ELK
+    - Check service health.
+7. **Application-Layer Configuration**
+    - Review and complete all items in the **Post-Deployment Configuration Checklist** section to prepare each service for game day. This includes configure CTFd options in the admin panel and creating Kibana dashboards.
 
 ## Why is it called Chik-p?
 
