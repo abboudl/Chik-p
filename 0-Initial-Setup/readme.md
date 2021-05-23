@@ -8,6 +8,9 @@ Welcome! The objective of this module to complete a number of important prerequi
 4. Create a Gcloud Service Account and Activate it
 5. Generate SSH Keys for Infrastructure Build Process Accounts
 
+## Prerequisites
+Chik-p is meant to be used as a template. If you have not already clicked the green "Use This Template" button on Chik-p's Github page, please do so! This action will create a copy of Chik-p's repository so that you can customize it for your CTF.
+
 ## Infrastructure Build Process: Important Accounts
 
 Before fulfilling this stage's objectives, the CTF infrastructure administrator should be aware of following accounts. Without these accounts, the infrastructure build process **cannot** succeed.
@@ -254,6 +257,7 @@ Add the CTF repository access key (`~/.ssh/ctf-repo-key.pub`) to your Github acc
 
 ![Upload SSH Key to Github Image](readme-images/17.png)
 
-
+## Next Steps
+Proceed to the **Cloud Resource Provisioning Stage**.
 
 
