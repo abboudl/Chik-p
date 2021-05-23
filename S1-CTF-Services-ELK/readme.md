@@ -16,15 +16,15 @@ This repository hosts five docker images: a 3-node Elasticsearch cluster, Logsta
 
 ## Configuration
 
-For a full configuration and administration guide, see Elastic Stack's official documentation: __________. The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
+For a full configuration and administration guide, see Elastic Stack's [official documentation](https://www.elastic.co/guide/index.html). The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
 
 ### Configuration Files
 Each service is configured using a YAML file in its config directory. The YAML file is named after the service. For example, es01 is configured using `es01/config/elasticsearch.yml`. Configuration parameters can also be set using environment variables under the `environment` key for each service in `docker-compose.yml`.
 
 Some of these configuration parameters, such as `PERMANENT_ELASTIC_PASSWORD` and `LOGSTASH_INTERNAL_USER_PASS` are secrets that should never be committed to a git repository. These secrets are read from a `.env` file in the same directory as `docker-compose.yml`. This `.env` file has been gitignored (i.e. it is not present in this Github repository). It is created automatically during the initial deployment by Ansible.
 
-Effectively, Ansible pulls passwords from a LastPass password vault, injects them into a template `.env` file, and then transfers this file over to the ELK host. <template file> and <deploy-elk.yml> provide a step by step guide on how CTFd is deployed.
-
+Effectively, Ansible pulls passwords from a LastPass password vault, injects them into a template `.env` file, and then transfers this file over to the ELK host.
+  
 ### Secure Cluster 
 
 Security features are enabled in this Elasticsearch cluster. TLS is enabled at the transport layer securing communication between Elasticsearch nodes. TLS is also enabled at the HTTP REST interface securing communication between Elasticsearch nodes and HTTP clients using the Elasticsearch API. 
@@ -45,10 +45,9 @@ The pipeline in logstash.conf, however, does process the access and error logs i
 
 CTF monitoring dashboards are not provided out of the box at this time. 
 
-
 ## Deployment
 
-See <template file> and <deploy-elk.yml> in <> to get an understanding of how ELK is deployed. 
+See [elk-env-template.j2](../4-Service-Deployment-Stage/templates/elk-env-template.j2) and [3-deploy-elk.yml](../4-Service-Deployment-Stage/3-deploy-elk.yml). to understand how ELK is deployed. 
 
 ### Network Location
 
