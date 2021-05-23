@@ -2,12 +2,10 @@
 
 ## Purpose
 
-To quote Elastic:
-```
-Elasticsearch is a search and analytics engine. Logstash is a server‑side data processing pipeline that ingests data from multiple sources simultaneously, transforms it, and then sends it to a "stash" like Elasticsearch. Kibana lets users visualize data with charts and graphs in Elasticsearch. 
-``` 
+"Elasticsearch is a search and analytics engine. Logstash is a server‑side data processing pipeline that ingests data from multiple sources simultaneously,      transforms it, and then sends it to a "stash" like Elasticsearch. Kibana lets users visualize data with charts and graphs in Elasticsearch." - Elastic
 
-Elasticsearch, Logstash, and Kibana--better known as "The ELK Stack"-- allow the CTF Infrastructure Administrator to:
+
+Elasticsearch, Logstash, and Kibana, better known as "The ELK Stack", allow the CTF Infrastructure Administrator to:
 - Monitor scoreboard health (500 errors, bad requests, etc.)
 - Monitor the scoreboard for evidence of crawling, scanning, and bruteforcing (login form, registration form). 
 - Monitor player behaviour for evidence of cheating such as flag submission bruteforcing
@@ -58,14 +56,15 @@ Internal Subnet.
 
 ### Important Accounts, Credentials, and Secrets
 
-During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to ELK that must be set up in lastpass prior to the <automated infrastructure build process>.
+During service deployment, Ansible uses the `lpass` commandline utility to retrieve secrets from a LastPass password vault. The following tables catalog all secrets related to ELK that must be set up in lastpass prior to the <automated infrastructure build process>.
 
-| Account/Credential       | LastPass Credential Name        | Description                                                                          |
-| -------------------------|---------------------------------|--------------------------------------------------------------------------------------|
-| elastic                  | ctf_elastic_user_bootstrap_pass, ctf_elastic_user_permanent_pass | The elastic user is the equivalent of root in Elasticsearch. It has two passwords. The bootstrap password is used to start the cluster and set the passwords of kibana_system and logstash_system. This password is then changed when the ELK cluster bootstrap process is completed and the logstash_system and kibana_system passwords have been set to ctf_elastic_user_permanent_pass |
-| logstash_system          | ctf_logstash_system_user_pass   | The logstash_system user is used for shipping logstash monitoring data to a secure Elasticsearch cluster (i.e. to monitor the logstash system)                   |
-| kibana_system            | ctf_kibana_system_user_pass     | The kibana_system user is used for shipping kibana monitoring data to a secure Elasticsearch cluster (i.e. to monitor the kibana system)                         |
-| logstash_internal        | ctf_logstash_internal_user_pass | The logstash_internal has the logstash_writer role and is responsible for writing data parsed by logstash to elasticsearch (like processed Nginx and CTFd logs)  |
+| LastPass ID                     | Secret Type | Username         | Description | 
+|---------------------------------|-------------|------------------|-------------|
+| ctf_elastic_user_bootstrap_pass | 16+ Character Password    | elastic          | The elastic user is the equivalent of root in Elasticsearch. It has two passwords. The bootstrap password is used to start the cluster and set the passwords of kibana_system and logstash_system. This password is then changed when the ELK cluster bootstrap process is completed and the logstash_system and kibana_system passwords have been set to ctf_elastic_user_permanent_pass |
+| ctf_elastic_user_permanent_pass | 16+ Character Password    | elastic          | The elastic user is the equivalent of root in Elasticsearch. It has two passwords. The bootstrap password is used to start the cluster and set the passwords of kibana_system and logstash_system. This password is then changed when the ELK cluster bootstrap process is completed and the logstash_system and kibana_system passwords have been set to ctf_elastic_user_permanent_pass |
+| ctf_logstash_system_user_pass   | 16+ Character Password    | logstash_system  | The logstash_system user is used for shipping logstash monitoring data to a secure Elasticsearch cluster (i.e. to monitor the logstash system)|                                                                                                  
+| ctf_kibana_system_user_pass     | 16+ Character Password    | kibana_system    | The kibana_system user is used for shipping kibana monitoring data to a secure Elasticsearch cluster (i.e. to monitor the kibana system)|
+| ctf_logstash_internal_user_pass | 16+ Character Password    | logstash_internal| The logstash_internal has the logstash_writr role and is responsible for writing data parsed by logstash to elasticsearch (like processed Nginx and CTFd logs)|
 
 ### Pre-Deployment Configuration Checklist
 
