@@ -18,7 +18,7 @@ Then on each remote host, they:
 All commands must be executed on the CTF Administration machine.
 ### Step #1: Connect to the Wireguard VPN
 
-Before running the playbooks in this repository, you must be connected to the CTF's virtual private network on GCP using the Wireguard VPN. Otherwise, you will not be able to reach non-internet-facing hosts such as the ELK host and the CTFd host.  
+Before running the playbooks in this stage, you must be connected to the CTF environment via the Wireguard VPN. Otherwise, you will not be able to reach non-internet-facing hosts such as the ELK host and the CTFd host.  
 
 To connect, run the Wireguard service using `systemctl`:
 ```
@@ -42,7 +42,7 @@ A prompt will appear asking you for a password. If Two-Factor Authentication (2F
 
 ### Step #3: Start an SSH agent and Add SSH Keys to it Keychain
 
-Ansible playbooks in this repository run under the security context of the `ctf` user on the CTFd, ELK, HAProxy, and Nginx hosts. Ansible needs to SSH as this user. To make Ansible aware of this user's identity (i.e. its private key), we add the key to the `ssh-agent`'s keychain. 
+Ansible playbooks in this stage run under the security context of the `ctf` user on the CTFd, ELK, HAProxy, and Nginx hosts. Ansible needs to SSH as this user. To make Ansible aware of this user's identity (i.e. its private key), we add the key to the `ssh-agent`'s keychain. 
 
 Check if the ssh-agent is running:
 ```
