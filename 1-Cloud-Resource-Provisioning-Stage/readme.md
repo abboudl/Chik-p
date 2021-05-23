@@ -85,7 +85,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 |----------------------------------|-----------------------------------------------------------------------|
 | VPC Network                      | Custom (Non-Default) CTF VPC Network on GCP                                                    |
 | DMZ Subnet                       | First of three subnets; proxies connections into the internal subnet as well as the hosted challenges cluster subnet. Currently contains Wireguard, Nginx, and HAProxy. <br /><br />Set by **DMZ_SUBNET_ID** and **DMZ_SUBNET_IP_RANGE** in `config.sh`.    |
-| Internal Subnet                  | Second of three subnets;  contains scoreboard and monitoring hosts (CTFd and ELK). <br /><br />Set by **INTERNAL_CTFD_SUBNET_ID** and **INTERNAL_CTFD_SUBNET_IP_RANGE** in `config.sh`.|
+| Internal Subnet                  | Second of three subnets;  contains scoreboard and monitoring hosts (CTFd and ELK). <br /><br />Set by **INTERNAL_SUBNET_ID** and **INTERNAL_SUBNET_IP_RANGE** in `config.sh`.|
 | Hosted Challenges Cluster Subnet | Third of three subnets; contains hosted challenges Google Kubernetes Engine (GKE) cluster.|
 | Cloud Router| Router for VPC Network. <br /><br />Set by **INTERNAL_HOSTED_CHALLENGES_SUBNET_ID** and **INTERNAL_HOSTED_CHALLENGES_SUBNET_IP_RANGE** in `config.sh`.|
 | NAT Configuration| A Cloud Router configuration that allows internal hosts (i.e. hosts with no public IP address) to reach the internet.| 
