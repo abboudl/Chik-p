@@ -1,12 +1,11 @@
 ## Objective
 The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and ELK hosts for service deployment. On each host, they:
 - install `docker` and `docker-compose`
-- install the GCP stackdriver agent to enable detailed resource consumption analytics (Ex: CPU, memory, and disk utilization).
+- install the GCP stackdriver agent to enable detailed utilization analytics (Ex: CPU, memory, and disk).
 - create the `ctf` account on each host and set its password.
-- upload the `ctf` user's public key (`~/.ssh/ctf.pub`) to `/home/ctf/.ssh/authorized_keys` so that Ansible as well as the CTF Infrastructure Administrator can login as this user from the Management VM
-- upload the Github repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
-
-Specifically for the ELK VM, the `4-configure-elk-vm.yml` playbook increases the system's vm.max_map_count to 262144 to satisfy an Elasticsearch requirement for production clusters. 
+- upload the `~/.ssh/ctf.pub` on the Management VM to `/home/ctf/.ssh/authorized_keys` to allow Ansible and the CTF admin to login as the `ctf` user.
+- upload the CTF repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
+- (ELK VM Only) increase the system's vm.max_map_count to 262144 to satisfy an Elasticsearch requirement for production clusters. 
 
 ## Prerequisites
 1. All prerequisites from earlier stages.
