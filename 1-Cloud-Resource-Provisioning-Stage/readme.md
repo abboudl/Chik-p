@@ -105,7 +105,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource             | Description                                                                                        |
 |--------------------------------|----------------------------------------------------------------------------------------------------|
-| Managed DNS Zone               | DNS Zone for CTF VPC. <br /><br />Set by **DNS_ZONE_ID** and **DNS_ZONE_DOMAIN** in `config.sh`.  |
+| Managed DNS Zone               | DNS Zone for CTF VPC. <br /><br />Set by **INTERNAL_DNS_ZONE_ID** and **INTERNAL_DNS_ZONE_DOMAIN** in `config.sh`.  |
 | Inbound DNS Forwarding Policy  | A DNS policy that allows on-prem machines (such as the CTF management machine) to query GCP DNS servers. Allows VPN clients to resolve GCP VPC DNS names.|
 
 <br />
@@ -236,7 +236,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource       | Description                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------|
 | HAProxy A Record         | A DNS A Record mapping the HAProxy host's private IP to its fully qualified domain name. <br /><br />Set by **HAPROXY_INTERNAL_IP** and **HAPROXY_INTERNAL_HOSTNAME** in `config.sh`.|
-| K8s Nodes A Records | A DNS A Record is created for each kubernetes Node (FQDN -> Private IP). <br /><br />Records follow the format: **challenges-cluster-node-i.DNS_ZONE_DOMAIN**, where **DNS_ZONE_DOMAIN** is the CTF environment's forward lookup zone and **i** is the node number. Numbering starts at 0.|
+| K8s Nodes A Records | A DNS A Record is created for each kubernetes Node (FQDN -> Private IP). <br /><br />Records follow the format: **challenges-cluster-node-i.INTERNAL_DNS_ZONE_DOMAIN**, where **INTERNAL_DNS_ZONE_DOMAIN** is the CTF environment's forward lookup zone and **i** is the node number. Numbering starts at 0.|
 
 <br />
 
@@ -251,7 +251,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 ![Cloudflare DNS Only Image](readme-images/3.png)
 
-If your public domain is behind Cloudflare, we recommend not proxying connections through Cloudflare servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users even though the Cloudflare protection level was set to the lowest possible setting.
+If your public domain is behind Cloudflare and you only have a free tier account, we recommend not proxying connections through Cloudflare servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users even though the Cloudflare protection level was set to the lowest possible setting.
 
 <br />
 
