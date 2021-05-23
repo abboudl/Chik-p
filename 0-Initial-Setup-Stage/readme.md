@@ -2,7 +2,7 @@
 
 ## Objectives
 Welcome! The objective of this module to complete a number of important prerequisites to the **Infrastructure Build Process**. More specifically, we will: 
-1. Create a LastPass Account for the CTF
+1. Create a LastPass Account for Your CTF
 2. Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF
 3. Set up the CTF Management VM
 4. Create a Gcloud Service Account and Activate it
