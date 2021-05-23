@@ -72,11 +72,9 @@ And to tear it down, run:
 
 ![Teardown Image](readme-images/2.png)
 
-4. Some of the gcloud scripts will ask you to create DNS records for internet-facing hosts (Nginx, HAProxy, etc.) so that you can resolve them on the internet. 
+4. Create DNS records for internet-facing hosts (Nginx, HAProxy, etc.) as directed by each script. 
 
-For example, a script will spit out the public IP address of the Nginx host and ask you to add a DNS A record to your public domain mapping that IP to a particular hostname (such as "ctf.issessions.ca"). 
-
-**Important Note:** The hostname given by the script is only a suggestion. You can use other hostnames if you wish. Just be consistent when configuring services later on.
+For example, a script will spit out the public IP address of the Nginx host and ask you to add a DNS A record to your public domain mapping that IP to a particular hostname (such as "ctf.issessions.ca"). Note that the hostname given by the script is only a suggestion. You can use other hostnames if you wish. Just be consistent when configuring services later on.
 
 <br />
 
