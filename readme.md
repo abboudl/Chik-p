@@ -47,16 +47,16 @@ Finally, Chikpea's architecture assumes a **100% online CTF**.
 
 ## Project Organization
 
-This Github repository contains a number of **modules** that perform a very specific function in Chik-p's overall build process. These modules are stored in dedicated subdirectories. There are two types of modules: **Infrastructure Deployment Modules** and **Service Modules**.
+This Github repository contains a number of **modules** that perform a very specific function in Chik-p's overall build process. These modules are stored in dedicated subdirectories. There are two types of modules: **Infrastructure Deployment Stages** and **Service Containers**.
 
-Infrastructure Deployment modules are meant to be explored sequentially (i.e. 0-4). Each has a **README** containing a set of instructions and project documentation. They also contain **bash**, **gcloud**, and **Ansible** scripts that drive a specific logical component of the build process. The  are:
-- **0-CTF-Infra-Initial-Setup:** explains how to generate credentials, how to set up a GCP project, and how create an administration VM for your CTF. Provides a number of helper scripts.
-- **1-CTF-Infra-GCloud-Build-Scripts:** Contains a set of gcloud scripts that lay the foundation for your CTF by provisioning cloud resources such as hosts, GKE clusters, IP addresses, firewall rules, etc. 
-- **2-CTF-Infra-Wireguard-VPN-Setup:** Contains a docker image of a Wireguard VPN as well as Ansible playbooks to provision the Wireguard VM and deploy the Wireguard service. 
-- **3-CTF-Infra-Host-Configuration-Playbooks:** Contains Ansible playbooks to configure hosts prior to service deployment by installing needed packages, transferring credentials (SSH Keys), and manipulating system properties. 
-- **4-CTF-Infra-Service-Deployment-Playbooks:** Contains Ansible playbooks that deploy services stored in *Service Modules* (CTFd, ELK, HAProxy, and Nginx).
+Infrastructure Deployment stages are meant to be explored sequentially (i.e. 0-4). Each has a **README** containing a set of instructions and project documentation. They also contain **bash**, **gcloud**, and **Ansible** scripts that drive a specific logical component of the build process. There are 5 stages:
+- **0-Initial-Setup-Stage:** explains how to generate credentials, how to set up a GCP project, and how create an administration VM for your CTF. Provides a number of helper scripts.
+- **1-Cloud-Resource-Provisioning-Stage:** Contains a set of gcloud scripts that lay the foundation for your CTF by provisioning cloud resources such as hosts, GKE clusters, IP addresses, firewall rules, etc. 
+- **2-Wireguard-VPN-Setup-Stage:** Contains a docker image of a Wireguard VPN as well as Ansible playbooks to provision the Wireguard VM and deploy the Wireguard service. 
+- **3-Host-Configuration-Stage:** Contains Ansible playbooks to configure hosts prior to service deployment by installing needed packages, transferring credentials (SSH Keys), and manipulating system properties. 
+- **4-Service-Deployment-Stage:** Contains Ansible playbooks that deploy services stored in *Service Modules* (CTFd, ELK, HAProxy, and Nginx).
 
-Service Modules contains one or more related services to be deployed once cloud resource provisioning and host configuration processes have completed. They are:
+Service Containers house one or more related services to be deployed during the **Service Deployment Stage**. They are 4 service containers:
 - **S1-CTF-Services-ELK:** contains docker images for a 3-node elasticsearch cluster, logstash, and Kibana.
 - **S2-CTF-Services-CTFd:** contains vanilla CTFd alongside a filebeat sidecar container. 
 - **S3-CTF-Services-Nginx:** contains an Nginx Docker image alongside a filebeat sidecar container.
@@ -77,25 +77,25 @@ These repositories are also provided as **templates**.
 
 ## Infrastructure Build Roadmap
 
-1. **0-Initial-Setup**
+1. **Initial Setup Stage**
     - Create a template of all Chik-p repositories.
     - Create a GCP project for your CTF
     - Set up a CTF Administration VM
     - Configure gcloud to use your GCP project's service account
     - Create a LastPass account for your CTF and seed it with credentials
     - Generate SSH Keys for CTF operating system accounts
-2. **Configure Services in Service Repositories**
-    - Review and complete all items in the **Pre-Deployment Prerequisites** section in Service Repositories.
-3. **1-GCloud-Build-Scripts**
+3. **Cloud Resource Provisioning Stage**
     - Run gcloud scripts to privision cloud resources and set up the CTF's foundation (hosts, IPs, Firewall rules, etc.)
     - Configure DNS A Records for Internet-facing Hosts (VPN Host, Nginx Host, and HAProxy Host).
-4. **2-Wireguard-VPN-Setup**
+4. **VPN Setup Stage**
     - Run Ansible playbooks to configure Wireguard VPN host with prerequisites for service deployment (install required packages, credentials, etc.)
     - Run an Ansible playbook to deploy the Wireguard service
-5. **3-Host-Configuration-Playbooks**
+5. **Host Configuration Stage**
     - Connect to the Wireguard VPN
     - Run Ansible playbooks to configure CTFd, Nginx, HAProxy, and ELK hosts with prerequisites for service deployment (install required packages, credentials, etc.)
     - Run Ansible playbooks to deploy the CTFd, Nginx, HAProxy, and ELK services
+6. **Service Deployment Stage:**
+    - Review and complete all items in the **Pre-Deployment Prerequisites** section in Service Repositories.
 
 ## Why is it called Chik-p?
 
