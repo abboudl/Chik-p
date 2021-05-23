@@ -251,7 +251,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 ![Cloudflare DNS Only Image](readme-images/3.png)
 
-If your public domain is behind Cloudflare and you only have a free tier account, we recommend not proxying connections through Cloudflare servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users even though the Cloudflare protection level was set to the lowest possible setting.
+If your public domain is behind Cloudflare and you have a free tier account, we recommend not proxying connections through Cloudflare's servers when creating DNS records (i.e. simply set DNS records to **DNS Only**; see screenshot below). In previous CTFs, cloudflare has blocked traffic to the CTF platform for 15-20 users, likely because it was seeing malicious strings in flag submissions. The problem persisted even though the Cloudflare protection level was set to the lowest possible (free-tier) setting.
 
 <br />
 
