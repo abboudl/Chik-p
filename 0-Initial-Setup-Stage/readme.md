@@ -121,17 +121,13 @@ git clone <repo_url>
 1. Make the script executable.
 
 ```
-
 chmod 700 0-admin-machine-setup.sh
-
 ```
 
 2. Run the script
 
 ```
-
 ./0-admin-machine-setup.sh
-
 ```
 
 4. If the script runs without errors, you have all the tools you need!
