@@ -114,6 +114,7 @@ This bash script will install all required utilities including:
 
 ```
 git clone <repo_url>
+cd 0-Initial-Setup-Stage/
 ```
 
 ### Step #2: Run `0-admin-machine-setup.sh`
