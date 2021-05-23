@@ -120,11 +120,18 @@ Retrieve the client config and move it to `/etc/wireguard` on the administration
 scp ctf@<your_vpn_public_domain>:/home/ctf/Chik-p/2-Wireguard-VPN-Setup-Stage/config/peer1/peer1.conf /tmp/peer1.conf
 sudo mv /tmp/peer1.conf /etc/wireguard/wg0.conf
 ```
-### Step #8: Start Wireguard VPN
+
+### Step #8: Enable the Wireguard VPN Systemd Service
+
+```
+sudo systemctl enable wg-quick@wg0 
+```
+
+### Step #9: Start Wireguard VPN
 
 Start the Wireguard service to connect to the VPN.
 ```
-sudo service wg-quick@wg0 start
+sudo systemctl start wg-quick@wg0 
 ```
 
 To check if you are connected, run:
@@ -141,7 +148,7 @@ ping 10.10.10.8
 
 To disconnect from the VPN, simply run:
 ```
-sudo service wg-quick@wg0 stop
+sudo systemctl stop wg-quick@wg0 
 ```
 
 
