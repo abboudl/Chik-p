@@ -44,14 +44,14 @@ The `config.sh` file is imported by all other scripts in the repository. It give
 
 1. Open `config.sh` and edit the value of **ANSIBLE_PUBLIC_KEY_PATH** to point to the path of the ansible public key on disk. If you followed the instructions in **0-Initial-Setup-Stage**, this should be its path: `~/.ssh/ansible.pub`.
 2. Edit other parameters as needed. Note that:
-  1. You may wish to change domain names.
-  2. You may wish to give VMs more or less resources.
-  3. You may wish to upgrade the OS images in use.
+  - You probably want to use a domain other than `issessions.ca` if you do not own that domain.
+  - You may wish to give VMs more or less resources.
+  - You may wish to upgrade the OS images in use.
 3. Run scripts in ascending order. Select only the components you wish to build (See the "Modular Components" section). 
 
 Go into the 1-Cloud-Resource-Provisioning-Stage directory:
 ```
-cd 1-Cloud-Resource-Provisioning-Stage
+cd 1-Cloud-Resource-Provisioning-Stage/
 ```
 
 Every script has two switches, an **up** switch and a **down** switch. The **up** switch builds infrastructure, whereas the **down** switch tears them down.  For example, to build the vpn component, run:
@@ -69,6 +69,12 @@ And to tear it down, run:
 ```
 
 ![Teardown Image](readme-images/2.png)
+
+4. Some of the gcloud scripts will ask you to create DNS records for internet-facing hosts (Nginx, HAProxy, etc.) so that you can resolve them on the internet. 
+
+For example, a script will spit out the public IP address of the Nginx host and ask you to add a DNS A record to your public domain mapping that IP to a particular hostname (such as "ctf.issessions.ca"). 
+
+**Important Note:** The hostname given by the script is only a suggestion. You can use other hostnames if you wish. Just be consistent when configuring services later on.
 
 <br />
 
