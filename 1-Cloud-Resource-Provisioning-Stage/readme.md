@@ -1,20 +1,20 @@
 
-# ISSessionsCTF Infrastructure: Google Cloud Platform (GCP) Build Scripts
+# CTF Infrastructure: Cloud Resource Provisioning Stage
 
 ## Purpose
 The scripts in this repository provide the ability to programatically provision Google Cloud Platform (GCP) resources, such as hosts, IP addresses, and firewall rules. The intent is to cut the time required to build a full-fledged Capture the Flag (CTF) environment. The scripts rely heavily on the `gcloud` utility to privision resources.
 
-It is important to understand that while the scripts in this repository provision the hardware and cloud resources that services such as CTFd, Nginx, and HaProxy rely on, they do not deploy these services themselves. A deployment guide for each of these services is provided in companion repositories. 
+**Important:** the scripts in this repository provision the hardware and cloud resources that services such as CTFd, Nginx, and HaProxy rely on, BUT they do not deploy these services themselves. A deployment guide for each of these services is provided in later stages. 
 
 ## Prerequisites
 
 ### Initial Setup Steps
-Before running the scripts in this repository, ensure you have successfully completed all steps in: [0-CTF-Infra-Initial-Setup](https://github.com/abboudl/0-CTF-Infra-Initial-Setup).
+Ensure you have successfully completed all objectives in **0-Initial-Setup-Stage**. Most importantly, `~/.ssh/ansible` must have been created and the GCloud Service Account should have been activated using `0-admin-account-setup.sh`.
 
-### The Ansible Key
-Later, hosts will be provisioned using Ansible, "an open-source software provisioning, configuration management, and application-deployment tool." An ansible public key is uploaded to each host created by the `gcloud` scripts in this repository. This key creates an ansible local account on each host enabling the deployment of ansible playbooks (i.e. provisioning script).
-
-Create an SSH key using `ssh-keygen` and set **ANSIBLE_PUBLIC_KEY_PATH** in `config.sh` to its location running the scripts in this repository.
+You can check is the which Gcloud service account is active using:
+```
+gcloud config list
+```
 
 ## Script Organization
 
@@ -35,15 +35,17 @@ The scripts are numbered by **order of execution**, however the CTF infrastructu
 
 Finally, there is nothing stopping the CTF infrastructure administrator(s) from **modifying a component** or **adding new components** to suit their needs. In fact, this is expected and recommended. 
 
-## Configuration and Customization
-The `config.sh` file is imported by all other scripts in the repository. It gives the CTF infrastructure administrator(s) the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided inside `config.sh`.
-<br />
-
 ## Deployment Order
 You should know that GCP resources are often dependent on each other. As such, when building infrastructure run scripts **in ascending order**. When tearing down infrastructure, run in scripts in **descending order**.
 <br />
 
 ## Script Usage Example
+
+### Configuration and Customization
+The `config.sh` file is imported by all other scripts in the repository. It gives the CTF infrastructure administrator(s) the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided inside `config.sh`.
+<br />
+
+Before running any scripts, open `config.sh` and edit the value of ****
 
 Every script has two switches, an **up** switch and a **down** switch. The **up** switch builds infrastructure, whereas the **down** switch tears them down. For example, to build the vpn component, run:
 
