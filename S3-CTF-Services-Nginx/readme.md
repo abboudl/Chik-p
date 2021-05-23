@@ -11,7 +11,7 @@ This repository hosts two docker images: Nginx and Filebeat. Both services are d
 
 ## Configuration
 
-For a full configuration and administration guide, see Nginx's official documentation: __________. The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
+For a full configuration and administration guide, see Nginx's [official documentation](https://nginx.org/en/docs/). The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
 
 ### Configuration File
 
@@ -39,7 +39,7 @@ In Kibana, Nginx access and error logs will appear under the following index pat
 
 ## Deployment
 
-See <template file> and <deploy-elk.yml> in <> to get an understanding of how Nginx is deployed. 
+See [nginx-env-template.j2](../4-Service-Deployment-Stage/templates/nginx-env-template.j2) and [3-deploy-nginx.yml](../4-Service-Deployment-Stage/3-deploy-nginx.yml) to understand how Nginx is deployed. 
 
 ### Network Location
 
@@ -49,7 +49,7 @@ DMZ Subnet.
 None.
 
 ### Pre-Deployment Configuration Checklist
-Edit `nginx/nginx.conf` with the following parameters. Edits must be consistent with parameters in `config.sh` in <>.
+Edit the following parameters `nginx/nginx.conf`. Edits must be consistent with the parameters you passed in `config.sh`.
 1. The FQDN and port of the backend web server hosting CTFd in the `upstream` block. Ex: `ctfd.int.ctf.issessions.ca:8000`
 2. CTFd's public domain name in the second `server` block (i.e. the HTTPS block). Ex: `ctf.issessions.ca` and `www.ctf.issessions.ca`
 3. The path to your letsencypt certificate and private key next `ssl_certificate` and `ssl_certificate_key`, respectively.
