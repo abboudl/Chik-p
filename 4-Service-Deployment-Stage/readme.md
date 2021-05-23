@@ -69,31 +69,27 @@ all:
   children:
     internal:
       hosts:
-        ctfd.int.ctf.issessions.ca:                     # change me
-        elk.int.ctf.issessions.ca:                      # change me
+        ctfd.int.ctf.issessions.ca: 
+        elk.int.ctf.issessions.ca: 
     dmz:
       hosts:
-        nginx.int.ctf.issessions.ca:                    # change me
-        haproxy.int.ctf.issessions.ca:                  # change me
+        nginx.int.ctf.issessions.ca: 
+        haproxy.int.ctf.issessions.ca: 
     elk:
       hosts:
-        elk.int.ctf.issessions.ca:                       # change me
-          elk_git_repo_owner: abboudl                    # change me
-          elk_git_repo_name: S1-CTF-Services-ELK         # change me
+        elk.int.ctf.issessions.ca:
+    ctfd:
       hosts:
-        ctfd.int.ctf.issessions.ca:                      # change me
-          ctfd_git_repo_owner: abboudl                   # change me
-          ctfd_git_repo_name: S2-CTF-Services-CTFd       # change me
+        ctfd.int.ctf.issessions.ca: 
     nginx:
       hosts:
-        nginx.int.ctf.issessions.ca:                     # change me
-          nginx_git_repo_owner: abboudl                  # change me
-          nginx_git_repo_name: S3-CTF-Services-Nginx     # change me
+        nginx.int.ctf.issessions.ca:
     haproxy:
       hosts:
-        haproxy.int.ctf.issessions.ca:                   # change me
-          haproxy_git_repo_owner: abboudl                # change me
-          haproxy_git_repo_name: S4-CTF-Services-HAProxy # change me
+        haproxy.int.ctf.issessions.ca:
+  vars:
+    chikp_git_repo_name: Chik-p           # change me
+    chikp_git_repo_owner: abboudl         # change me
 
 ```
 
