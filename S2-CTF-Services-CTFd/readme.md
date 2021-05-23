@@ -77,7 +77,6 @@ Internal Subnet.
 
 During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to CTFd that must be set up in lastpass prior to the <automated infrastructure build process>.
 
-## CTFd Accounts
 | LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
 |---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
 | ctf_ctfd_secret_key             | 64-Character Secret Key  | ctf_ctfd_secret_key | Used by the CTFd Flask application to sign session cookies for protection against cookie data tampering. |
