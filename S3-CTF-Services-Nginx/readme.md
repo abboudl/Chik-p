@@ -39,7 +39,7 @@ In Kibana, Nginx access and error logs will appear under the following index pat
 
 ## Deployment
 
-See [nginx-env-template.j2](../4-Service-Deployment-Stage/templates/nginx-env-template.j2) and [3-deploy-nginx.yml](../4-Service-Deployment-Stage/3-deploy-nginx.yml) to understand how Nginx is deployed. 
+See [nginx-env-template.j2](../4-Service-Deployment-Stage/templates/nginx-env-template.j2) and [3-deploy-nginx.yml](../4-Service-Deployment-Stage/5-deploy-nginx.yml) to understand how Nginx is deployed. 
 
 ### Network Location
 
