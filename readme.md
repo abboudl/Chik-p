@@ -26,6 +26,8 @@ Chik-p is a project created by Information Security students at Sheridan College
 
 ## Architecture
 
+![Infrastructure Diagram](infra-diagram.svg)
+
 Chik-p is deployed using a combination of `gcloud` and `Ansible` to Google Cloud Platform (GCP). It leverages existing services and cloud resources including:
 1. **CTFd**: to act as a scoreboard, a challenge host, and a registration and flag submission portal. 
 2. **Elasticsearch, Logstash, and Kibana (ELK)**: for game statistics collection and security monitoring.
