@@ -40,7 +40,7 @@ You should know that GCP resources are often dependent on each other. As such, w
 
 Before proceeding, note that all commands must be run on the **Infrastructure Management VM**.
 
-The `config.sh` file is imported by all other scripts in the repository. It gives the CTF Infrastructure Administrator the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided inside `config.sh`.
+The `config.sh` file is imported by all other scripts in the repository. It gives the CTF Infrastructure Administrator the ability to customize the deployment by exposing several common parameters such as subnet ranges, IP addresses, fully qualified domain names, OS image versions, CPU, memory, and disk allocation. A description of each parameter is provided in the **Cloud Resource Catalog** below..
 <br />
 
 1. Go into the 1-Cloud-Resource-Provisioning-Stage directory:
