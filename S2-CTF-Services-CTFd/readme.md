@@ -8,11 +8,11 @@ CTFd is a multi-tiered solution consisting of three services:
 - A MariaDB MySQL database
 - A Redis cache
 
-This repository hosts an instance of CTFd coupled with a Filebeat service to ship logs to ELK. All four services are built into docker images and then deployed using docker-compose and Ansible as part of the automated infrastructure build process. 
+This repository hosts an instance of CTFd coupled with a Filebeat service to ship logs to ELK. All four services are built into docker images and then deployed using docker-compose and Ansible as part of the infrastructure build process. 
 
 ## Configuration
 
-For a full configuration and administration guide, see CTFd's official documentation: __________. The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
+For a full configuration and administration guide, see CTFd's [official documentation](https://docs.ctfd.io/). The remainder of this section will discuss important details relevant to the CTF infrastructure administrator.
 
 ### Configuration Files
 
@@ -24,9 +24,9 @@ Some of these configuration parameters, such as `SECRET_KEY` and `MYSQL_PASSWORD
 
 If you wish to run CTFd in standalone mode for testing purposes, option #1 is preferable. Simply rename `.example-env` to `.env`, edit the file, then run `docker-compose up`. 
 
-If you wish to deploy the entire environment, option #2 is preferable. You do not need to do anything. Passwords are pulled from a LastPass vault, injected into a template `.env` file, and then transferred over to the CTFd host. <template file> and <deploy-ctfd.yml> provide a step by step guide on how CTFd is deployed.
+If you wish to deploy the entire environment, option #2 is preferable. You do not need to do anything. Passwords are pulled from a LastPass vault, injected into a template `.env` file, and then transferred over to the CTFd host.
 
-Next, we provide a brief description of a few important configuration parameters set in docker-compose.yml file:
+Next, we provide a brief description of a few important configuration parameters set in `docker-compose.yml` file:
 - **LOG_FOLDER**: set the CTFd logging folder inside the container which houses CTFd, Gunicorn, and MySQL logs.
 - **ACCESS_LOG** and **ERROR LOG**: enables the gunicorn access and error logs. While these logs are enabled, we choose to ship the Nginx logs to ELK as they are closer to the user.
 - **WORKERS**: set the number of gunicorn workers to 10 . This value offers great performance for a CTF with 500-800 participants assuming 2vCPUs and a 12GB of RAM.
@@ -67,7 +67,7 @@ By default, CTFd limits flag submissions to 10 per minute per team.
 
 ## Deployment
 
-See <template file> and <deploy-ctfd.yml> in <> to form an understanding of how CTFd is deployed.
+See [ctfd-env-template.j2](../4-Service-Deployment-Stage/templates/ctfd-env-template.j2) and [3-deploy-ctfd.yml](../4-Service-Deployment-Stage/3-deploy-ctfd.yml) to understand how CTFd is deployed. 
 
 ### Network Location
 
