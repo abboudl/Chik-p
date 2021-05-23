@@ -2,14 +2,15 @@
 
 ## Objectives
 Welcome! The objective of this module to complete a number of important prerequisites to the **Infrastructure Build Process**. More specifically, we will: 
-1. Create a LastPass Account for Your CTF
-2. Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF
-3. Set up the CTF Management VM
-4. Create a Gcloud Service Account and Activate it
-5. Generate SSH Keys for Infrastructure Build Process Accounts
+1. Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF
+2. Set up the CTF Management VM
+3. Create a Gcloud Service Account and Activate it
+4. Generate SSH Keys for Infrastructure Build Process Accounts
+5. Create a LastPass Account for Your CTF and Seed it with Credentials
 
 ## Prerequisites
-Chik-p is meant to be used as a template. If you have not already clicked the green "Use This Template" button on Chik-p's Github page, please do so! This action will create a copy of Chik-p's repository so that you can customize it for your CTF.
+1. Chik-p is meant to be used as a template. If you have not already clicked the green "Use This Template" button on Chik-p's Github page, please do so! This action will create a copy of Chik-p's repository so that you can customize it for your CTF.
+2. By default, Chik-p assumes that you are setting up a 100% online public CTF (i.e not behind a VPN). As such, you will need a reguistered public domain such as `issessions.ca`.
 
 ## Infrastructure Build Process: Important Accounts
 
@@ -41,15 +42,9 @@ The `ctf` user is created and its public key is uploaded to each host in the CTF
 We will show you! SSH keys for the Gcloud Service Account, the CTF Github Account, the `ansible` user, and the `ctf` user will be generated in the **Initial Setup Stage** (as in very soon).
 
 ### Are there any other accounts?
-Oh yes! Plenty! There are accounts associated with every service (CTFd, ELK, etc.). We leave a discussion of each of these account to each service's dedicated readme.
+Oh yes! Plenty! There are accounts associated with every service (CTFd, ELK, etc.). In objective #5, we will add these to our LastPass password vault.
 
-## **Objective #1: Create a LastPass Account for the CTF**
-
-LastPass will store CTF credentials. These credentials will be pulled dynamically by Ansible during the infrastructure build process (using the `lpass` commandline utility). And in doing so, we mitigate the risk of accidentally committing passwords to Github repositories or hardcoding them in our code.
-
-Installing LastPass is easy. If you need help, follow the instructions in this [video](https://www.youtube.com/watch?v=PDVJR7RXvzs). Don't forget to choose a **strong memorable Master Password** and enable **Multi-Factor-Authentication (MFA)**.
-
-## **Objective #2: Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF**
+## **Objective #1: Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF**
 
 ### **Step #1: Create a CTF Google Account**
 
@@ -90,7 +85,7 @@ Your CTF's GCP project is now all set up!
 
 <br />
 
-## **Objective #3: Set up the CTF Management VM**
+## **Objective #2: Set up the CTF Management VM**
 
 The CTF Management VM is used to deploy and manage CTF infrastructure.
 
@@ -134,7 +129,7 @@ chmod 700 0-admin-machine-setup.sh
 3. If the script runs without errors, you have all the deployment tools you need (gcloud, Ansible, etc.)!
 
 
-### Install Wireguard VPN Client 
+### Install the Wireguard VPN Client 
 
 #### Step #1: Install Wireguard package
 
@@ -155,7 +150,7 @@ $ sudo -i
 
 In the **Wireguard VPN Setup Stage**, we will set up a Wireguard VPN Server on GCP and create a client config.
 
-## **Objective #4: Create a Gcloud Service Account and Activate it**
+## **Objective #3: Create a Gcloud Service Account and Activate it**
 
 Complete the following steps on the CTF Infrastructure Administrator's management VM.
 
@@ -236,7 +231,7 @@ chmod 700 0-admin-account-setup.sh
 
 <br />
 
-## **Objective #5: Generate SSH Keys for Infrastructure Build Process Accounts**
+## **Objective #4: Generate SSH Keys for Infrastructure Build Process Accounts**
 
 Next, we generate three SSH key pairs on the CTF's Management VM and store them in the `~/.ssh` directory.
 - The first key pair allows Ansible to authenticate to CTF hosts and run playbooks as the `ansible` user.
@@ -278,6 +273,14 @@ Add the CTF repository access key (`~/.ssh/ctf-repo-key.pub`) to your Github acc
 8. Click **"Add SSH Key"**
 
 ![Upload SSH Key to Github Image](readme-images/17.png)
+
+## **Objective #5: Create a LastPass Account for the CTF**
+
+LastPass will store CTF credentials. These credentials will be pulled dynamically by Ansible during the infrastructure build process (using the `lpass` commandline utility). And in doing so, we mitigate the risk of accidentally committing passwords to Github repositories or hardcoding them in our code.
+
+Installing LastPass is easy. If you need help, follow the instructions in this [video](https://www.youtube.com/watch?v=PDVJR7RXvzs). Don't forget to choose a **strong MEMORABLE Master Password** and enable **Multi-Factor-Authentication (MFA)**.
+
+Next, seed it with the credentials itemized in this account [catalog] (./account-catalog.md).
 
 ## Next Steps
 Proceed to the **Cloud Resource Provisioning Stage**.
