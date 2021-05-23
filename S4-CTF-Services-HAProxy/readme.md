@@ -39,12 +39,12 @@ frontend braceforltrace-sysadmin
         bind *:30903
 ```
 
-You do not need to do anything for HTTP-based challenges. Those are managed by `ingress-nginx`. See <Hosted Challenge Repo>. 
+You do not need to do anything for HTTP-based challenges. Those are managed by `ingress-nginx`.
 
 
 ## Deployment
 
-See <template file> and <deploy-haproxy.yml> in <> to get an understanding of how HAProxy is deployed. 
+See [haproxy-env-template.j2](../4-Service-Deployment-Stage/templates/haproxy-env-template.j2) and [6-deploy-haproxy.yml](../4-Service-Deployment-Stage/6-deploy-haproxy.yml) to understand how Nginx is deployed. 
 
 ### Network Location
 
