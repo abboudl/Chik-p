@@ -4,8 +4,8 @@
   tasks:
     - name: Clone Nginx Github respository
       git:
-        repo: "git@github.com:{{ nginx_git_repo_owner }}/{{ nginx_git_repo_name }}.git"
-        dest: "/home/ctf/{{ nginx_git_repo_name }}"
+        repo: "git@github.com:{{ chikp_git_repo_owner }}/{{ chikp_git_repo_name }}.git"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}"
         accept_hostkey: yes
 
     - name: >-
@@ -14,14 +14,14 @@
         transfer the result.
       ansible.builtin.template:
         src: "./templates/nginx-env-template.j2"
-        dest: "/home/ctf/{{ nginx_git_repo_name }}/.env"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/.env"
         owner: ctf
         group: ctf
         mode: '0600'
 
     - name: Create Nginx letsencrypt certificate bundle directory
       ansible.builtin.file:
-        path: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/"
+        path: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/nginx/nginx-letsencrypt-tls/"
         state: directory
         owner: ctf                                          
         group: ctf
@@ -30,7 +30,7 @@
     - name: Transfer Nginx letsencrypt certificate bundle
       ansible.builtin.unarchive:
         src: "./tls/nginx-letsencrypt-tls.tgz"
-        dest: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/" 
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/nginx/nginx-letsencrypt-tls/" 
         owner: ctf
         group: ctf
         mode: '0700'
@@ -39,7 +39,7 @@
         Lookup files with .pem pattern. These files are secrets and 
         their permissions must be set to 600.
       find:
-        paths: "/home/ctf/{{ nginx_git_repo_name }}/nginx/nginx-letsencrypt-tls/"
+        paths: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/nginx/nginx-letsencrypt-tls/"
         file_type: file
         patterns: "*.pem"
         recurse: yes
@@ -60,12 +60,12 @@
 
     - name: Generate Diffie-Hellman parameters for stronger SSL (2048 bits)
       community.crypto.openssl_dhparam:
-        path: "/home/ctf/{{ nginx_git_repo_name }}/nginx/dhparam-2048.pem"
+        path: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/nginx/dhparam-2048.pem"
         size: 2048
 
     - name: Build Nginx image and start container
       community.docker.docker_compose:
-        project_src: "/home/ctf/{{ nginx_git_repo_name }}/"
+        project_src: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/"
         build: yes
         nocache: yes
         state: present

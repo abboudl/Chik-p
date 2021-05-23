@@ -4,8 +4,8 @@
   tasks:
     - name: Clone CTFd Github respository
       git:
-        repo: "git@github.com:{{ ctfd_git_repo_owner }}/{{ ctfd_git_repo_name }}.git"
-        dest: "/home/ctf/{{ ctfd_git_repo_name }}"
+        repo: "git@github.com:{{ chikp_git_repo_owner }}/{{ chikp_git_repo_name }}.git"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}"
         accept_hostkey: yes
 
     - name: >-
@@ -14,14 +14,14 @@
         transfer the result.
       ansible.builtin.template:
         src: ./templates/ctfd-env-template.j2
-        dest: "/home/ctf/{{ ctfd_git_repo_name }}/.env"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S2-CTF-Services-CTFd/.env"
         owner: ctf
         group: ctf
         mode: '0600'
 
     - name: Build CTFd images (ctfd flask app, redis, and mariadb) and start containers
       community.docker.docker_compose:
-        project_src: "/home/ctf/{{ ctfd_git_repo_name }}/"
+        project_src: "/home/ctf/{{ chikp_git_repo_name }}/S2-CTF-Services-CTFd/"
         build: yes
         nocache: yes
         state: present

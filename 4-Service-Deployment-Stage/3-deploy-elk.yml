@@ -2,15 +2,15 @@
   user: ctf
 
   tasks:
-    - name: Clone ELK Github respository
+    - name: Clone Chikp Github respository
       git:
-        repo: "git@github.com:{{ elk_git_repo_owner }}/{{ elk_git_repo_name }}.git"
-        dest: "/home/ctf/{{ elk_git_repo_name }}"
+        repo: "git@github.com:{{ chikp_git_repo_owner }}/{{ chikp_git_repo_name }}.git"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}"
         accept_hostkey: yes
 
-    - name: Set permissions of ELK repository to those of the CTF infrastructure administrator.
+    - name: Set permissions of Chikp repository to those of the ctf account.
       file:
-        path: "/home/ctf/{{ elk_git_repo_name }}" 
+        path: "/home/ctf/{{ chikp_git_repo_name }}" 
         owner: "ctf"
         group: "ctf"
         state: directory
@@ -21,14 +21,15 @@
         from password vault and populate elk-env-template.j2 template.
       ansible.builtin.template:
         src: "./templates/elk-env-template.j2"
-        dest: "/home/ctf/{{ elk_git_repo_name }}/.env"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/.env"
         owner: ctf
         group: ctf
         mode: '0600'
 
     - name: >-
-        Transfer Elasticsearch TLS certificate bundle into the ELK git repository on the remote host,
-        once per cluster node (3 transfers in total).
+        Transfer Elasticsearch TLS certificate bundle into the Elasticsearch config 
+        directories on the remote host, once per Elasticsearch cluster node (3 transfers 
+        in total).
       ansible.builtin.unarchive:
         src: "./tls/elasticsearch-tls.tgz"
         dest: "{{ item }}"
@@ -36,27 +37,27 @@
         group: ctf
         mode: '0600'
       loop:
-        - "/home/ctf/{{ elk_git_repo_name }}/es01/config/"
-        - "/home/ctf/{{ elk_git_repo_name }}/es02/config/"
-        - "/home/ctf/{{ elk_git_repo_name }}/es03/config/"  
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es01/config/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es02/config/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es03/config/"  
   
-    - name: Transfer Logstash TLS certificate bundle into the ELK git repository on the remote host
+    - name: Transfer Logstash TLS certificate bundle into Logstash config directory on the ELK host
       ansible.builtin.unarchive:
         src: "./tls/logstash-tls.tgz"
-        dest: "/home/ctf/{{ elk_git_repo_name }}/logstash/config/"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/logstash/config/"
         owner: ctf
         group: ctf
         mode: '0600'
     
-    - name: Transfer Kibana TLS certificate bundle into the ELK git repository on the remote host
+    - name: Transfer Kibana TLS certificate bundle into the Kibana config directory on the ELK host
       ansible.builtin.unarchive:
         src: "./tls/kibana-tls.tgz"
-        dest: "/home/ctf/{{ elk_git_repo_name }}/kibana/config/"
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/kibana/config/"
         owner: ctf
         group: ctf
         mode: '0600'
 
-    - name: Copy CA certificate to Elasticsearch, Logstash, and Kibana directories on the remote host
+    - name: Copy CA certificate to Elasticsearch, Logstash, and Kibana config directories on the ELK host
       ansible.builtin.copy:
         src: ./tls/ca/ca.crt
         dest: "{{ item }}"
@@ -64,15 +65,15 @@
         group: ctf
         mode: '0600'
       loop: 
-        - "/home/ctf/{{ elk_git_repo_name }}/es01/config/elasticsearch-tls/"
-        - "/home/ctf/{{ elk_git_repo_name }}/es02/config/elasticsearch-tls/"
-        - "/home/ctf/{{ elk_git_repo_name }}/es03/config/elasticsearch-tls/"  
-        - "/home/ctf/{{ elk_git_repo_name }}/logstash/config/logstash-tls/"
-        - "/home/ctf/{{ elk_git_repo_name }}/kibana/config/kibana-tls/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es01/config/elasticsearch-tls/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es02/config/elasticsearch-tls/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/es03/config/elasticsearch-tls/"  
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/logstash/config/logstash-tls/"
+        - "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/kibana/config/kibana-tls/"
 
     - name: Build ELK images (es01, es02, es03, logstash, and kibana) and start containers
       community.docker.docker_compose:
-        project_src: "/home/ctf/{{ elk_git_repo_name }}/"
+        project_src: "/home/ctf/{{ chikp_git_repo_name }}/S1-CTF-Services-ELK/"
         build: yes
         nocache: yes
         state: present

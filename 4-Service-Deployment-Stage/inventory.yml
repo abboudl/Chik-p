@@ -11,22 +11,18 @@ all:
     elk:
       hosts:
         elk.int.ctf.issessions.ca:
-          elk_git_repo_owner: abboudl
-          elk_git_repo_name: S1-CTF-Services-ELK
+    ctfd:
       hosts:
         ctfd.int.ctf.issessions.ca: 
-          ctfd_git_repo_owner: abboudl
-          ctfd_git_repo_name: S2-CTF-Services-CTFd
     nginx:
       hosts:
         nginx.int.ctf.issessions.ca:
-          nginx_git_repo_owner: abboudl
-          nginx_git_repo_name: S3-CTF-Services-Nginx
     haproxy:
       hosts:
         haproxy.int.ctf.issessions.ca:
-          haproxy_git_repo_owner: abboudl
-          haproxy_git_repo_name: S4-CTF-Services-HAProxy  
+  vars:
+    chikp_git_repo_name: Chik-p
+    chikp_git_repo_owner: abboudl
 
         
 
