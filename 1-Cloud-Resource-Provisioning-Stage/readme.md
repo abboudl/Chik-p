@@ -256,4 +256,4 @@ If your public domain is behind Cloudflare and you have a free tier account, we 
 <br />
 
 ## Next Steps
-Once you have deployed your desired components successfully and added DNS records, you are ready to proceed to the **2-Wireguard-VPN-Setup-Stage**.
+Once you have deployed your desired components successfully and added DNS records, you are ready to proceed to the **Wireguard VPN Setup Stage**.
