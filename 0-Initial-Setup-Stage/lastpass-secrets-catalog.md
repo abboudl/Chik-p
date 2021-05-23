@@ -1,6 +1,5 @@
 # Lastpass Secrets Catalog
 
-## How do I populate the Lastpass password vault?
 For the infrastructure build process to succeed, Lastpass must be seeded with the following credentials.
 1. Create an entry for each of these secrets in your CTF Lastpass password vault
 2. Place the **LastPass ID** column in the **Name** field.
