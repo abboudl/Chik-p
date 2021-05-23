@@ -2,6 +2,7 @@
 The Ansible playbooks in this repository deploy the CTFd, Nginx, HAProxy, and ELK containers to their respective host. On the CTF administration VM, they:
 - Create a Certificate Authority (CA) for the CTF environment and generate TLS certificates for all services
 - (Optional) Use Certbot's Cloudflare plugin to request a LetsEncypt certificate for the scoreboard
+
 Then on each remote host, they:
 - Clone the Chik-p Github respoitory
 - Pull the relevant service's secrets from LastPass to create a `.env` secrets file
