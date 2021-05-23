@@ -203,7 +203,7 @@ Complete the following steps on the CTF Infrastructure Administrator's managemen
 
 <br />
 
-### **Step #4: Activate the Gcloud Service Account on the CTF Management VM**
+### **Step #3: Activate the Gcloud Service Account on the CTF Management VM**
 
 1. Make `1-admin-account-setup.sh` executable.
 
@@ -276,7 +276,7 @@ Add the CTF repository access key (`~/.ssh/ctf-repo-key.pub`) to your Github acc
 
 ## **Objective #5: Create a LastPass Account for the CTF**
 
-LastPass will store CTF credentials. These credentials will be pulled dynamically by Ansible during the infrastructure build process (using the `lpass` commandline utility). And in doing so, we mitigate the risk of accidentally committing passwords to Github repositories or hardcoding them in our code.
+LastPass will store CTF credentials. These credentials will be pulled dynamically by Ansible during the infrastructure build process (using the `lpass` commandline utility). And in doing so, we mitigate the risk of accidentally committing passwords to Github or hardcoding them in our code.
 
 Installing LastPass is easy. If you need help, follow the instructions in this [video](https://www.youtube.com/watch?v=PDVJR7RXvzs). Don't forget to choose a **strong MEMORABLE Master Password** and enable **Multi-Factor-Authentication (MFA)**.
 
