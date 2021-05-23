@@ -24,7 +24,7 @@ Each script in the Cloud Resource Provisioning Stage describes a modular logical
 5. **The Hosted Challenges Component**: provisions resources related to hosted challenges such as the GKE Kubernetes cluster and the HAProxy host. Implemented by: `5-build-hosted-challenges-component.sh`. 
 <br />
 
-**Modular Components**
+### Modular Components**
 
 The scripts are numbered by **order of execution**, however the CTF infrastructure administrator need not use all components at once or at all. At the moment, the following configurations are viable:
 - **Full Platter**: run all scripts.
@@ -33,7 +33,7 @@ The scripts are numbered by **order of execution**, however the CTF infrastructu
 
 Finally, there is nothing stopping the CTF infrastructure administrator(s) from **modifying a component** or **adding new components** to suit their needs. In fact, this is expected and recommended. 
 
-## Deployment Order
+### Deployment Order
 You should know that GCP resources are often dependent on each other. As such, when building the infrastructure, run scripts **in ascending order**. When tearing down infrastructure, run in scripts in **descending order**.
 <br />
 
