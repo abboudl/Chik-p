@@ -1,5 +1,9 @@
-## Purpose
-
+## Objective
+The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and ELK hosts for service deployment by:
+- installing `docker` and `docker-compose`
+- installing the GCP stackdriver monitoring agent
+- creating the `ctf` account on each host
+- 
 
 ## Prerequisites
 
