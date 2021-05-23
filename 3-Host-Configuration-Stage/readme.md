@@ -5,7 +5,7 @@ The Ansible playbooks in this repository prepare the CTFd, Nginx, HAProxy, and E
 - create the `ctf` account on each host and set its password.
 - upload the `~/.ssh/ctf.pub` on the Management VM to `/home/ctf/.ssh/authorized_keys` to allow Ansible and the CTF admin to login as the `ctf` user.
 - upload the CTF repository's access key (`~/.ssh/ctf-repo-key`) into `/home/ctf/.ssh/` effectively allowing the `ctf` user to pull and deploy services from Github.
-- (ELK VM Only) increase the system's vm.max_map_count to 262144 to satisfy an Elasticsearch requirement for production clusters. 
+- (ELK VM Only) increase the system's `vm.max_map_count` to `262144` to satisfy an Elasticsearch requirement for production clusters. 
 
 ## Prerequisites
 1. All prerequisites from earlier stages.
@@ -17,7 +17,7 @@ All commands must be executed on the CTF Administration machine.
 
 ### Step #1: Connect to the Wireguard VPN
 
-Before running the playbooks in this repository, you must be connected to the CTF's virtual private network on GCP using the Wireguard VPN. Otherwise, you will not be able to reach non-internet-facing hosts such as the ELK host and the CTFd host.  
+Before running the playbooks in this stage, you must be connected to the CTF environment via the Wireguard VPN. Otherwise, you will not be able to reach non-internet-facing hosts such as the ELK host and the CTFd host.  
 
 To connect, run the Wireguard service using `systemctl`:
 ```
@@ -41,7 +41,7 @@ A prompt will appear asking you for a password. If Two-Factor Authentication (2F
 
 ### Step #3: Start an SSH agent and Add SSH Keys to it Keychain
 
-Ansible playbooks in this repository run under the security context of the `ansible` user on the CTFd, ELK, HAProxy, and Nginx hosts. Ansible needs to SSH as this user. To make Ansible aware of this user's identity (i.e. its private key), we add the key to the `ssh-agent`'s keychain. 
+Ansible playbooks in this stage run under the security context of the `ansible` user on the CTFd, ELK, HAProxy, and Nginx hosts. Ansible needs to SSH as this user. To make Ansible aware of this user's identity (i.e. its private key), we add the key to the `ssh-agent`'s keychain. 
 
 Check if the ssh-agent is running:
 ```
