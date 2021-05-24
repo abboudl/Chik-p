@@ -19,7 +19,8 @@ apt-get install -y \
   curl \
   gnupg-agent \
   software-properties-common \
-  openresolv
+  openresolv \
+  python3-setuptools
 
 # Install docker (if not installed)
 if ! [ -x "$(command -v docker)" ]; then
