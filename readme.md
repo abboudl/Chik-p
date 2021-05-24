@@ -39,7 +39,7 @@ Chik-p is deployed using a combination of `gcloud` and `Ansible` to Google Cloud
 
 All services (CTFd, ELK, Nginx, HAProxy, and Wireguard) are packaged as `docker` images and are deployed using `docker-compose`.
 
-The CTF's virtual private network (VPC) is divided into three subnets:
+The CTF's virtual private cloud (VPC) is divided into three subnets:
 1. **Internal Subnet**: contains the CTFd host and the ELK host.
 2. **DMZ Subnet**: contains the Nginx, HAProxy, and Wireguard hosts.
 3. **Hosted Challenges Cluster Subnet**: contains the Google Kubernetes Engine (GKE) cluster and by extension ingress-nginx. This subnet is completely isolated from all other subnets for security.
