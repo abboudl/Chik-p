@@ -24,7 +24,7 @@ services:
     volumes:
       # Nginx logs volume 
       - nginx-logs:/var/log/nginx/
-      # Named volume fsdata. This is used to persist the registry file between restarts, so to avoid data duplication
+      # Named volume fbdata. This is used to persist the registry file between restarts, so to avoid data duplication
       - fbdata-nginx:/usr/share/filebeat/data/
     depends_on:
       - nginx
