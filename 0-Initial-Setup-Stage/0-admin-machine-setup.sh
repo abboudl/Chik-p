@@ -79,7 +79,7 @@ if ! [ -x "$(command -v lpass)" ]; then
     xclip \
     asciidoc \
     xsltproc
-  git clone git@github.com:lastpass/lastpass-cli.git && \
+  git clone https://github.com/lastpass/lastpass-cli.git && \
     cd lastpass-cli && \
     make && \
     make install && \
@@ -93,10 +93,6 @@ snap install --classic certbot && \
 snap set certbot trust-plugin-with-root=ok && \
 snap install --classic certbot-dns-cloudflare && \
 snap connect certbot:plugin certbot-dns-cloudflare 
-
-
-# CTFd's ctfcli installation (if not installed)
-git clone https://github.com/csivitu/ctfcli/ && cd ctfcli && sudo python3 setup.py install --record files.txt
 
 
 
