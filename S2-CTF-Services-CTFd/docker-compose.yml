@@ -57,8 +57,8 @@ services:
         internal:
 
   filebeat:
-    container_name: filebeat
-    image: ctf-filebeat:7.10.2
+    container_name: ctf-filebeat
+    image: ctf-filebeat:${ELK_VERSION}
     hostname: filebeat
     user: root
     build: 
