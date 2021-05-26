@@ -1,4 +1,6 @@
-FROM haproxy:2.3
+ARG HAPROXY_VERSION
+
+FROM haproxy:${HAPROXY_VERSION}
 
 ENV HAPROXY_USER haproxy
 
