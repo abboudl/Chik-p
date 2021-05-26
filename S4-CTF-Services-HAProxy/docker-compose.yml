@@ -3,8 +3,11 @@ version: "3.5"
 services:
   haproxy:
     container_name: ctf-haproxy
-    image: ctf-haproxy:2.3
-    build: ./haproxy/
+    image: ctf-haproxy:${HAPROXY_VERSION}
+    build: 
+      context: ./haproxy/
+      args:
+        HAPROXY_VERSION: $HAPROXY_VERSION
     environment:
       STATS_PANEL_USERNAME: $STATS_PANEL_USERNAME
       STATS_PANEL_PASSWORD: $STATS_PANEL_PASSWORD
