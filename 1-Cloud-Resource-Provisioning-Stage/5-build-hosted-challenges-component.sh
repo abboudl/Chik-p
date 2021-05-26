@@ -183,14 +183,7 @@ if [ "$SCRIPT_MODE" = "up" ]; then
 	  "mapping challenges.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN} to HAProxy's Public IP: ${HAPROXY_PUBLIC_IP}<<<${ENDCOLOR}"
 
   echo -e "${YELLOW}This is required because players connect to the challenge Louai's Labyrinth, for example, by SSHing into"\
-	  "challenges.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN}:30500${ENDCOLOR}"
-
-  echo -e "\n${YELLOW}>>>Next Steps: To allow access to web-based (HTTP/HTTPS) challenges, add a DNS A record on your public domain's DNS portal for"\
-	  "each web-based challenge mapping the ingress-nginx's public IP: $INGRESS_NGINX_CONTROLLER_PUBLIC_IP to each challenge's virtual host name.${ENDCOLOR}"
-
-  echo -e "${YELLOW}For example, players browse to the challenge Louai's Labyrinth by visiting"\
-	  "labyrinth.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN}${ENDCOLOR}"
-  
+	  "challenges.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN}:30500${ENDCOLOR}" 
 
 elif [ "$SCRIPT_MODE" = "down" ]; then
   

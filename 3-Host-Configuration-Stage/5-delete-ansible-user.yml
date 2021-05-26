@@ -1,0 +1,13 @@
+- hosts: dmz:internal
+  user: ctf
+  vars:
+    ansible_become: yes
+    ansible_become_password: "{{ lookup('community.general.lastpass', 'ctf_user_pass', field='password') }}"
+
+  tasks:
+  - name: Now that we are done configuring hosts with the ansible user, remove it.
+    user:
+      name: ansible
+      state: absent
+      remove: yes
+      force: yes

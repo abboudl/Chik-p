@@ -101,13 +101,6 @@ if [ "$SCRIPT_MODE" = "up" ]; then
 	  --description="This policy allows VPN clients to query the private DNS zone of the GCP ISSessionsCTF environment." \
 	  --networks="$VPC_NETWORK" \
 	  --enable-inbound-forwarding
-  sleep 30
-
-  # List GCP DNS Servers
-  echo -e "${YELLOW}>>>Ensure that the following DNS resolution IPs are in your VPN configuration<<<${ENDCOLOR}"
-  gcloud compute addresses list \
-	  --filter='purpose="DNS_RESOLVER"' \
-	  --format='csv(address,region,subnetwork)'
 
 elif [ "$SCRIPT_MODE" = "down" ]; then
 

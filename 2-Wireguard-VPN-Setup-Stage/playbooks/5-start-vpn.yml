@@ -1,0 +1,23 @@
+- hosts: vpn
+  user: ctf
+  vars:
+    chikp_git_repo_owner: abboudl
+    chikp_git_repo_name: Chik-p
+
+  tasks:
+  - name: Clone Chik-p repository
+    git:
+      repo: "git@github.com:{{ chikp_git_repo_owner }}/{{ chikp_git_repo_name }}.git"
+      dest: "/home/ctf/{{ chikp_git_repo_name }}"
+      accept_hostkey: yes
+
+  - name: Build Wireguard VPN image and start container
+    community.docker.docker_compose:
+      project_src: "/home/ctf/{{ chikp_git_repo_name }}/2-Wireguard-VPN-Setup-Stage/"
+      build: yes
+      nocache: yes
+      state: present
+    register: output
+
+  - ansible.builtin.debug:
+      var: output
