@@ -1,4 +1,6 @@
-FROM nginx:1.17
+ARG NGINX_VERSION
+
+FROM nginx:${NGINX_VERSION}
 
 # Prepare environment
 RUN apt update && apt upgrade -y && \
