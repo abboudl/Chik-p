@@ -34,6 +34,14 @@
         owner: ctf
         group: ctf
         mode: '0700'
+ 
+    - name: Copy CA certificate to filebeat directory on Nginx host
+      ansible.builtin.copy:
+        src: ./tls/ca/ca.crt
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S3-CTF-Services-Nginx/filebeat/"
+        owner: ctf
+        group: ctf
+        mode: '0600'
 
     - name: >- 
         Lookup files with .pem pattern. These files are secrets and 
@@ -44,10 +52,6 @@
         patterns: "*.pem"
         recurse: yes
       register: pemlist
-
-    - name: debug - print matched .pem files.
-      debug:
-        msg: "{{ pemlist.files }}"
 
     - name: Change .pem files' permissions to 600
       file:

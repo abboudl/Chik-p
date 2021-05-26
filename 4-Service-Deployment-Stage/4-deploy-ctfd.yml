@@ -19,6 +19,14 @@
         group: ctf
         mode: '0600'
 
+    - name: Copy CA certificate to filebeat directory on CTFd host
+      ansible.builtin.copy:
+        src: ./tls/ca/ca.crt
+        dest: "/home/ctf/{{ chikp_git_repo_name }}/S2-CTF-Services-CTFd/filebeat/"
+        owner: ctf
+        group: ctf
+        mode: '0600'
+
     - name: Build CTFd images (ctfd flask app, redis, and mariadb) and start containers
       community.docker.docker_compose:
         project_src: "/home/ctf/{{ chikp_git_repo_name }}/S2-CTF-Services-CTFd/"

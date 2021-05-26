@@ -19,7 +19,10 @@ services:
     image: ctf-nginx-filebeat:${ELK_VERSION}
     hostname: filebeat
     user: root
-    build: ./filebeat/
+    build: 
+      context: ./filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
     restart: on-failure
     volumes:
       # Nginx logs volume 

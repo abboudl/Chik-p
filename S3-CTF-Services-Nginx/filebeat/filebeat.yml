@@ -21,5 +21,6 @@ filebeat.registry.path: /usr/share/filebeat/data/registry
 output.logstash:
   enabled: true
   hosts: ["elk.int.ctf.issessions.ca:5044"]
+  ssl.certificate_authorities: ["/usr/share/filebeat/ca.crt"]
   worker: 2
 

@@ -61,7 +61,10 @@ services:
     image: ctf-filebeat:7.10.2
     hostname: filebeat
     user: root
-    build: ./filebeat/
+    build: 
+      context: ./filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
     restart: on-failure
     volumes:
       # Mount the CTFD logs directory 
