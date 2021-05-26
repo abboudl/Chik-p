@@ -21,7 +21,7 @@
       mode: '0755'
 
   - name: Create the CA's private key, an 4096-bit RSA key
-    openssl_privatekey:
+    community.crypto.openssl_privatekey:
       path: ./tls/ca/ca_key.pem
       type: RSA
       size: 4096
@@ -43,7 +43,7 @@
     register: ca_csr
 
   - name: Sign the CA's Certificate Signing Request with the CA's private key to generate the CA certificate.
-    openssl_certificate:
+    community.crypto.x509_certificate:
       path: ./tls/ca/ca.crt
       csr_path: "{{ ca_csr.filename }}"
       privatekey_path: "{{ ca_key.filename }}"
@@ -61,7 +61,7 @@
       mode: '0755'
 
   - name: Create elasticsearch nodes' private key. This is the transport layer key.
-    openssl_privatekey:
+    community.crypto.openssl_privatekey:
       path: ./tls/elasticsearch-tls/es-transport-key.pem
       type: RSA
       size: 4096
@@ -86,7 +86,7 @@
   - name: >-
       Sign the elasticsearch transport layer CSR with the CA's private key produce the elasticsearch 
       transport layer certificate which encrypts traffic between elasticsearch nodes.
-    openssl_certificate:
+    community.crypto.x509_certificate:
       path: ./tls/elasticsearch-tls/es-transport.crt
       csr_path: "{{ es_transport_csr.filename }}"
       provider: ownca
@@ -97,7 +97,7 @@
   - name: >-
       Next, we generate HTTP layer elasticsearch certificates to protect traffic between elasticsearch nodes 
       and elasticsearch clients. First, create the elasticsearch HTTP layer private key.
-    openssl_privatekey:
+    community.crypto.openssl_privatekey:
       path: ./tls/elasticsearch-tls/es-http-key.pem
       type: RSA
       size: 4096
@@ -123,7 +123,7 @@
   - name: >- 
       Sign the elasticsearch http layer CSR with the CA's private key to produce the elasticsearch
       http layer certificate which encrypts traffic between elasticsearch nodes and elastissearch clients.
-    openssl_certificate:
+    community.crypto.x509_certificate:
       path: ./tls/elasticsearch-tls/es-http.crt
       csr_path: "{{ es_http_csr.filename }}"
       provider: ownca
@@ -145,7 +145,7 @@
       mode: '0755'
     
   - name: Create the kibana's server's private key
-    openssl_privatekey:
+    community.crypto.openssl_privatekey:
       path: ./tls/kibana-tls/kibana-key.pem
       type: RSA
       size: 4096
@@ -165,7 +165,7 @@
   - name: >-
       Sign the Kibana's server's CSR with the CA's private key to produce the Kibana
       certificate which encrypts traffic between Kibana and the user's browser.
-    openssl_certificate:
+    community.crypto.x509_certificate:
       path: ./tls/kibana-tls/kibana.crt
       csr_path: "{{ kibana_csr.filename }}"
       provider: ownca
@@ -187,10 +187,11 @@
       mode: '0755'
     
   - name: Create the logstash server's private key
-    openssl_privatekey:
+    community.crypto.openssl_privatekey:
       path: ./tls/logstash-tls/logstash-key.pem
       type: RSA
       size: 4096
+      format: pkcs8
       state: present
     register: logstash_key
 
@@ -207,7 +208,7 @@
   - name: >-
       Sign the logstash's server's CSR with the CA's private key to produce the logstash
       certificate which encrypts traffic between logstash and the elastic beats.
-    openssl_certificate:
+    community.crypto.x509_certificate:
       path: ./tls/logstash-tls/logstash.crt
       csr_path: "{{ logstash_csr.filename }}"
       provider: ownca
