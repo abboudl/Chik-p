@@ -2,9 +2,12 @@ version: '3.5'
 
 services:
   nginx:
-    container_name: ctf-nginx-https-1.17
-    image: ctf-nginx:1.17
-    build: ./nginx/
+    container_name: ctf-nginx
+    image: ctf-nginx:${NGINX_VERSION}
+    build: 
+      context: ./nginx/
+      args:
+        NGINX_VERSION: $NGINX_VERSION
     restart: unless-stopped
     ports : 
       - 80:8080
@@ -15,8 +18,8 @@ services:
 
   
   filebeat:
-    container_name: ctf-nginx-filebeat
-    image: ctf-nginx-filebeat:${ELK_VERSION}
+    container_name: ctf-filebeat
+    image: ctf-filebeat:${ELK_VERSION}
     hostname: filebeat
     user: root
     build: 
