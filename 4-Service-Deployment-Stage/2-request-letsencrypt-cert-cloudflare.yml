@@ -32,14 +32,14 @@
       mode: '0600'
 
   - name: If a certificate does not already exist, request a certificate using certbot's cloudflare plugin
-    ansible.builtin.command: "certbot certonly --dns-cloudflare --dns-cloudflare-credentials ./cloudflare.ini --non-interactive --config-dir {{ letsencrypt_config_dir }} --work-dir {{ letsencrypt_work_dir }} --logs-dir {{ letsencrypt_logs_dir }} --agree-tos --email {{ letsencrypt_email }} -d {{ public_ctfd_fqdn }} -d www.{{ public_ctfd_fqdn }}"
+    command: "certbot certonly --dns-cloudflare --dns-cloudflare-credentials ./cloudflare.ini --non-interactive --config-dir {{ letsencrypt_config_dir }} --work-dir {{ letsencrypt_work_dir }} --logs-dir {{ letsencrypt_logs_dir }} --agree-tos --email {{ letsencrypt_email }} -d {{ public_ctfd_fqdn }} -d www.{{ public_ctfd_fqdn }}"
     register: certbot_request_output
     when: not ctfd_cert.stat.exists
 
   - name: If the certificate does already exist, try to renew it
-    ansible.builtin.command: "certbot renew --dns-cloudflare --dns-cloudflare-credentials ./cloudflare.ini --config-dir {{ letsencrypt_config_dir }} --work-dir {{ letsencrypt_work_dir }} --logs-dir {{ letsencrypt_logs_dir }}"
+    command: "certbot renew --dns-cloudflare --dns-cloudflare-credentials ./cloudflare.ini --config-dir {{ letsencrypt_config_dir }} --work-dir {{ letsencrypt_work_dir }} --logs-dir {{ letsencrypt_logs_dir }}"
     register: certbot_request_output
-    when: ctfd_cert.stat.exists and using_cloudflare_dns == "yes"  
+    when: ctfd_cert.stat.exists 
 
   - name: delete generated cloudflare.ini file
     ansible.builtin.file:
