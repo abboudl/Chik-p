@@ -165,7 +165,7 @@ Complete the following steps on the CTF Infrastructure Administrator's managemen
     - **Service Account Description**: A service account used to deploy and provision CTF infrastructure.
   - Assign the following **roles** to your service account:
     - **Compute Admin**: Full management of all Compute Engine resources.
-    - **Kubernetes Cluster Admin**: Management of Kubernetes clusters.
+    - **Kubernetes Engine Cluster Admin**: Management of Kubernetes clusters.
     - **Service Account User**: Run operations as the service account.
     - **Storage Admin**: Push images to Container Registry.
     - **DNS Administrator**: Full read-write access to DNS resources.
