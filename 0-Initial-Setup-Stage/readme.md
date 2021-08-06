@@ -208,7 +208,7 @@ Complete the following steps on the CTF Infrastructure Administrator's managemen
 1. Make `1-admin-account-setup.sh` executable.
 
 ```
-chmod 700 0-admin-account-setup.sh
+chmod 700 1-admin-account-setup.sh
 ```
 
 2. Open the script and fill in the **Service Account Name**, **Service Account Key Path**, and **Project ID**.
