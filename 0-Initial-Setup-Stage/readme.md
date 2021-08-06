@@ -145,7 +145,7 @@ $ sudo -i
 # cd /etc/wireguard
 # umask 077
 # sudo wg genkey > private-key
-# sudo wg pubkey > public-key < private
+# sudo wg pubkey > public-key < private-key
 ```
 
 In the **Wireguard VPN Setup Stage**, we will set up a Wireguard VPN Server on GCP and create a client config.
