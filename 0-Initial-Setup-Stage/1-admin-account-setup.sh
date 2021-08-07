@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
-GCP_SERVICE_ACCOUNT=<INSERT_SERVICE_ACCOUNT>
-GCP_SERVICE_ACCOUNT_KEY=<INSERT_SERIVE_ACCOUNT_KEY_PATH>
-GCP_PROJECT_ID=<INSERT_GCP_PROJECT_ID>
+source .env
+
+# Check to see if env variables set
+variables=(GCP_SERVICE_ACCOUNT GCP_SERVICE_ACCOUNT_KEY GCP_PROJECT_ID) 
+
+for var in $variables; do
+  if echo ${!var} | grep 'INSERT' &> /dev/null; then
+    echo "Please set the $var variable in the .env file"
+    exit 1
+  fi
+done
 
 # Activate GCP service account
 gcloud auth activate-service-account "$GCP_SERVICE_ACCOUNT" \
@@ -11,5 +19,3 @@ gcloud auth activate-service-account "$GCP_SERVICE_ACCOUNT" \
 
 # Configure Docker to use Google Container Registry
 gcloud auth configure-docker gcr.io
-
-
