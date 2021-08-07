@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-source .env
+# Read configuration from global config file
+source config.sh
 
 # Check to see if env variables set
 variables=(GCP_SERVICE_ACCOUNT GCP_SERVICE_ACCOUNT_KEY GCP_PROJECT_ID) 
