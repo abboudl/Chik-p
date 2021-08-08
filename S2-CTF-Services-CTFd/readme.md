@@ -30,12 +30,12 @@ Next, we provide a brief description of a few important configuration parameters
 - **LOG_FOLDER**: set the CTFd logging folder inside the container which houses CTFd, Gunicorn, and MySQL logs.
 - **ACCESS_LOG** and **ERROR LOG**: enables the gunicorn access and error logs. While these logs are enabled, we choose to ship the Nginx logs to ELK as they are closer to the user.
 - **WORKERS**: set the number of gunicorn workers to 10 . This value offers great performance for a CTF with 500-800 participants assuming 2vCPUs and a 12GB of RAM.
-- **REVERSE PROXY**: tell CTFd that it behind a reverse proxy like Nginx.
+- **REVERSE PROXY**: tell CTFd that it is behind a reverse proxy like Nginx.
 - **HTML_SANITIZATION**: turn on HTML sanitization to escape dangerous characters and protect against attacks like XSS.
 
 ### CTF Data
 
-Upon launch, CTFd creates a `.data` directory in the project root. Most subdirectories of `.data` are configured as bind mounts (under the `volumes` key in docker-compose. They expose runtime data inside the CTFd, MariaDB, and MySQL containers to the underlying host. Runtime data includes logs, uploads, cached items, etc.
+Upon launch, CTFd creates a `.data` directory in the project root. Most subdirectories of `.data` are configured as bind mounts (under the `volumes` key in docker-compose). They expose runtime data inside the CTFd, MariaDB, and MySQL containers to the underlying host. Runtime data includes logs, uploads, cached items, etc.
 
 You can use the `.data` directory to conduct a full restore of CTFd in the event of a disaster. As such, it is critical that you create regular backups of this directory. An easy way to do this is to schedule a cron job on the CTFd host that creates a backup of this directory evey 2 minutes or so.
 
@@ -75,7 +75,7 @@ Internal Subnet.
 
 ### Important Accounts, Credentials, and Secrets
 
-During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to CTFd that must be set up in lastpass prior to the <automated infrastructure build process>.
+During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to CTFd that must be set up in lastpass prior to service deployment.
 
 | LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
 |---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
@@ -114,8 +114,8 @@ Every once in a while, a new version of CTFd is released packed with new feature
 The only differences between vanilla CTFd and this fork are:
 - A modified docker-compose file
 - A modified Dockerfile
-- The addition of the filebeat directory
+- The addition of the filebeat sidecar container
 
 These changes should be fairly easy to replicate to the new version.
 
-It becomes difficult to update CTFd, however, if the forked version's code has been modified (for example, to include a new logging module). The patching process may become tedious. As such, it is recommended that changes to the codebase are kept minor and easily repeatable. It is better to fix problems at the source by submitting a feature request or even a pull request to CTFd.
+Updating CTFd, however, becomes difficult if the forked version's code has been modified. The patching process may become tedious. As such, it is recommended that changes to the codebase are kept minor and easily repeatable. It is better to fix problems at the source by submitting a pull request to CTFd.
