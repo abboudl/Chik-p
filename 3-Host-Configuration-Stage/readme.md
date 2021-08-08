@@ -66,7 +66,7 @@ ssh-add ~/.ssh/ansible
 
 ### Step #4: Set Ansible's Target Hosts in `inventory.yml` 
 
-Ansible's `inventory.yml` file allows us to groups hosts by some property: location, organizational unit, production vs. testing, etc to allow us to perform the same action against a group. In this case, we divide hosts by subnet. We also create a group for each individual host to remove the need to edit every playbook individually if a hostname or IP changes (This is generally bad practice but in this case, our environment is small so it doesn't matter too much). We then point playbooks either to a single host, all hosts in a single subnet or all hosts in multiple subnets.
+Ansible's `inventory.yml` file allows us to group hosts by some property: location, organizational unit, production vs. testing, etc to allow us to perform the same action against a group. In this case, we divide hosts by subnet. We also create a group for each individual host to remove the need to edit every playbook individually if a hostname or IP changes (This is generally bad practice but in this case, our environment is small so it doesn't matter too much). We then point playbooks either to a single host, all hosts in a single subnet or all hosts in multiple subnets.
 ```
 all:
   children:
@@ -100,9 +100,9 @@ For example,we tell Ansible to run this playbook on all hosts in the DMZ subnet 
   become: yes
 ```
 
-Your must edit the groups in the `inventory.yml` file to match the IP addresses or fully qualified domain names you assigned the CTFd, ELK, HAproxy, and Nginx hosts in `config.sh` in the **Cloud Resource Provisioning Stage.**
+Your must edit the groups in the `inventory.yml` file to match the IP addresses or FQDNs you assigned the CTFd, ELK, HAproxy, and Nginx hosts in `config.sh` in the **Cloud Resource Provisioning Stage.**
 
-Finally, if you chose not to deploy all hosts - for example, if you decided that you do not need ELK or HAProxy - you also need to narrow down the `hosts` key in each playbook. By default, most playbooks target all hosts in the DMZ and Internal subnets.
+Finally, if you chose not to deploy all hosts - for example, if you decided that you do not need ELK or HAProxy - you also need to adjust the `hosts` key in each playbook accordingly. By default, most playbooks target all hosts in the DMZ and Internal subnets.
 
 ### Step #5: Run Ansible Playbooks
 
@@ -113,8 +113,9 @@ cd 3-Host-Configuration-Stage/
 ansible-playbook 0-install-docker.yml -i inventory.yml
 ansible-playbook 1-install-docker-compose.yml -i inventory.yml
 ansible-playbook 2-install-stackdriver-agent.yml -i inventory.yml
-ansible-playbook 3-setup-credentials.yml -i inventory.yml
+ansible-playbook 3-set-up-credentials.yml -i inventory.yml
 ansible-playbook 4-configure-elk-vm.yml -i inventory.yml
+ansible-playbook 5-delete-ansible-user.yml -i inventory.yml
 ```
 
 or to simply run all playbooks:
