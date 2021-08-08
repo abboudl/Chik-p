@@ -20,8 +20,8 @@ Nginx's configuration file is `nginx/nginx.conf`. The default configuration:
 2. pass requests to the CTFd host on port 8000
 3. set the maximum # of requests from a single IP to 40 requests per second and maximum # of connections to 15
 4. configure SSL and read in a letsencrypt certificate and key for scoreboard's domain
-5. Turn on the access and error log using the default "combined" logging format.
-6. Set the maximum request body size to 4GB to accomodate large images in forensics challenges 
+5. Turn on the access and error log using the default "combined" logging format
+6. Set the maximum request body size to 4GB to accommodate large images in forensics challenges 
 
 ### A Note on Rate Limiting
 
@@ -49,7 +49,7 @@ DMZ Subnet.
 None.
 
 ### Pre-Deployment Configuration Checklist
-Edit the following parameters `nginx/nginx.conf`. Edits must be consistent with the parameters you passed in `config.sh`.
+Edit the following parameters in `nginx/nginx.conf`. Edits must be consistent with the parameters you passed in `config.sh`.
 1. The FQDN and port of the backend web server hosting CTFd in the `upstream` block. Ex: `ctfd.int.ctf.issessions.ca:8000`
 2. CTFd's public domain name in the second `server` block (i.e. the HTTPS block). Ex: `ctf.issessions.ca` and `www.ctf.issessions.ca`
 3. The path to your letsencypt certificate and private key next `ssl_certificate` and `ssl_certificate_key`, respectively.
