@@ -2,15 +2,15 @@
 
 ## Objectives
 Welcome! The objective of this module to complete a number of important prerequisites to the **Infrastructure Build Process**. More specifically, we will: 
-1. Create a Google Account and a Google Cloud Platform (GCP) Project for Your CTF
+1. Create a Google account and a Google Cloud Platform (GCP) project for your CTF
 2. Set up the CTF Management VM
-3. Create a Gcloud Service Account and Activate it
-4. Generate SSH Keys for Infrastructure Build Process Accounts
-5. Create a LastPass Account for Your CTF and Seed it with Credentials
+3. Create a gcloud service account and activate it
+4. Generate SSH Keys for infrastructure build process accounts
+5. Create a LastPass account for your CTF and seed it with credentials
 
 ## Prerequisites
 1. Chik-p is meant to be used as a template. If you have not already clicked the green "Use This Template" button on Chik-p's Github page, please do so! This action will create a copy of Chik-p's repository so that you can customize it for your CTF.
-2. By default, Chik-p assumes that you are setting up a 100% online public CTF (i.e not behind a VPN). As such, you will need a reguistered public domain such as `issessions.ca`.
+2. By default, Chik-p assumes that you are setting up a 100% online public CTF (i.e not behind a VPN). As such, you will need a registered public domain such as `issessions.ca`.
 
 ## Infrastructure Build Process: Important Accounts
 
@@ -23,23 +23,20 @@ This is a personal or organizational Google account (think gmail) capable of cre
 The gcloud service account is used to provision cloud resources using the `gcloud` commandline utility during the **Cloud Resource Provisioning Stage**. It has full administrative access to all cloud resources in the CTF project including hosts, managed DNS zones, GKE clusters, etc. `gcloud` authenticates to GCP as this service account using a private key obtained from the Google Cloud Console. 
 
 ### The CTF Github Account 
-During the infrastructure build process, Ansible clones this respository to retrieve and deploy CTF services (CTFd, Nginx, etc.). Chik-p assumes that the CTF Infrastructure Administrator stores their customized copy of Chik-p in a private Github repository. As a consequence of this assumption, the CTF Infrastructure Administrator must generate an SSH key pair for hosts in the CTF in order to give them access to this Github repository.
+During the infrastructure build process, Ansible clones this respository to retrieve and deploy CTF services (CTFd, Nginx, etc.). Chik-p assumes that the CTF Infrastructure Administrator stores their customized copy of Chik-p in a private Github repository. As a consequence, the CTF Infrastructure Administrator must generate an SSH key pair for hosts in the CTF in order to give them access to this Github repository.
 
 The public key must be uploaded manually to the CTF's Github account. Later, an Ansible playbook in the **Host Configuration Stage** distributes the associated private key to each host in the CTF environment.  
 
 ### The `ansible` user
-The `ansible` user is a local account that exists on every host in the CTF environment. Ansible logs in as this user when it needs to run playbooks that require root privileges on the target host. These playbooks are often concerned with creating users, installing packages, and modifying system parameters. The `ansible` user is created and its public key is uploaded to each host in the CTF environment by `gcloud` (as part of the host's creation process).
+The `ansible` user is a bootstrap account that drives the infrastructure build process. It creates users, installs packages, and modifies system parameters. The `ansible` user is created and its public key is uploaded to each host in the CTF environment by `gcloud` (as part of the host's creation process). It is deleted once all hosts are ready for service deployment.
 
 ### The `ctf` user
-The `ctf` user is a local account that exists on every host in the CTF environment. The `ctf` user serves two purposes:
-
-1. During the initial infrastructure build process, Ansible logs in as this user when it needs to deploy services or run playbooks that DO NOT require root privileges on the target host. In that sense, it serves as a second Ansible service account.
-2. It is used by the CTF infrastructure administrator to carry out day to day administrative tasks (such as starting and stopping services). By default, it is a member of the `sudo` and `docker` groups. 
+The `ctf` user is a local account that exists permanently on every host in the CTF environment. Driven by Ansible, it deployes services to hosts. It is also used by the CTF infrastructure administrator to carry out day to day administrative tasks (such as starting and stopping services). By default, it is a member of the `sudo` and `docker` groups.
 
 The `ctf` user is created and its public key is uploaded to each host in the CTF environment by Ansible during the **Host Configuration stage**.
 
 ### How do I generate SSH keys for these accounts?
-We will show you! SSH keys for the Gcloud Service Account, the CTF Github Account, the `ansible` user, and the `ctf` user will be generated in the **Initial Setup Stage** (as in very soon).
+We will show you! SSH keys for the gcloud service account, the CTF Github account, the `ansible` user, and the `ctf` user will be generated in the **Initial Setup Stage** (as in very soon).
 
 ### Are there any other accounts?
 Oh yes! Plenty! There are accounts associated with every service (CTFd, ELK, etc.). In objective #5, we will add these to our LastPass password vault.
@@ -53,7 +50,7 @@ Follow best practices:
 2. Limit access to a handful of trusted individuals. If this account is compromised, everything is compromised.
 3. Enable MFA.
 
-### **Step #2: Log into the GCP cloud console at:** [**https://console.google.cloud.com**](https://console.google.cloud.com/)
+### **Step #2: Log into the GCP cloud console at:** [**https://console.cloud.google.com**](https://console.cloud.google.com/)
 
 ![Google Cloud Console Image](readme-images/5.png)
 
@@ -120,10 +117,10 @@ cd 0-Initial-Setup-Stage/
 chmod 700 0-admin-machine-setup.sh
 ```
 
-2. Run the script
+2. Run the script as root
 
 ```
-./0-admin-machine-setup.sh
+sudo ./0-admin-machine-setup.sh
 ```
 
 3. If the script runs without errors, you have all the deployment tools you need (gcloud, Ansible, etc.)!
@@ -158,19 +155,19 @@ Complete the following steps on the CTF Infrastructure Administrator's managemen
 
 - This account will be used to provision cloud resources (such as Google Compute Engine VMs) programmatically.
 - Go back to the Google Cloud Console
-- Search for **"Service Accounts"** in the Search Bar of the Google Cloud Console.
+- Search for **"Service Accounts"** in the search bar of the Google Cloud Console.
   - Fill in the form with the following parameters:
     - **Service Account Name**: ctf-infra-manager
     - **Service Account ID**: ctf-infra-manager
     - **Service Account Description**: A service account used to deploy and provision CTF infrastructure.
   - Assign the following **roles** to your service account:
     - **Compute Admin**: Full management of all Compute Engine resources.
-    - **Kubernetes Engine Admin**: Management of Kubernetes clusters.
+    - **Kubernetes Engine Cluster Admin**: Management of Kubernetes clusters.
     - **Service Account User**: Run operations as the service account.
     - **Storage Admin**: Push images to Container Registry.
     - **DNS Administrator**: Full read-write access to DNS resources.
   - Skip the **"Grant users access to this service account"** section.
-  - Click **"Create"**.
+  - Click **"Done"**.
 
 ![Service Accounts Image](readme-images/6.png)
 
