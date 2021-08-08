@@ -4,8 +4,7 @@ For the infrastructure build process to succeed, Lastpass must be seeded with th
 1. Create an entry for each of these secrets in your CTF Lastpass password vault
 2. Place the **LastPass ID** column in the **Name** field.
 3. Place the **Username** column in the **Username** field.
-4. Generate a secret that specification given in the **Secret Type** column and place it in the **Password** field.
-
+4. Generate a secret that follows the specification given in the **Secret Type** column and place it in the **Password** field
 
 ## Local Accounts
 | LastPass ID   | Secret Type | Username | Description | 
