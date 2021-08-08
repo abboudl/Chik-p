@@ -27,8 +27,8 @@ Each script in the Cloud Resource Provisioning Stage describes a modular logical
 
 The scripts are numbered by **order of execution**, however the CTF infrastructure administrator need not use all components at once or at all. At the moment, the following configurations are viable:
 - **Full Platter**: run all scripts.
-- **Blind Bandit:** `1-build-network-component.sh` -> `2-build-vpn-component.sh` -> `3-build-scoreboard-component.sh` -> `5-build-hosted-challenges-component.sh`
-- **Keep it Simple, Stupid!:** `1-build-network-component.sh` -> `2-build-vpn-component.sh` -> `3-build-scoreboard-component.sh`
+- **Blind Bandit:** `0-build-network-component.sh` -> `1-build-vpn-component.sh` -> `2-build-scoreboard-component.sh` -> `4-build-hosted-challenges-component.sh`
+- **Keep it Simple, Stupid!:** `0-build-network-component.sh` -> `1-build-vpn-component.sh` -> `2-build-scoreboard-component.sh`
 
 Finally, there is nothing stopping the CTF infrastructure administrator(s) from **modifying a component** or **adding new components** to suit their needs. In fact, this is expected and recommended. 
 
