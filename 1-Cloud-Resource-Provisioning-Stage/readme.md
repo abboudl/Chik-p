@@ -7,7 +7,7 @@ The scripts in this repository provide the ability to programatically provision 
 **Important:** the scripts in this repository provision the hardware and cloud resources that services such as CTFd, Nginx, and HaProxy rely on, BUT they do not deploy these services themselves. A deployment guide for each of these services is provided in later stages. 
 
 ## Prerequisites
-Ensure you have successfully completed all objectives in **0-Initial-Setup-Stage**. Most importantly, `~/.ssh/ansible` and `~/.ssh/ansible.pub` must have been created and the GCloud Service Account should have been activated using `0-admin-account-setup.sh`.
+Ensure you have successfully completed all objectives in **0-Initial-Setup-Stage**. Most importantly, `~/.ssh/ansible` and `~/.ssh/ansible.pub` must have been created and the gcloud service account should have been activated using `0-admin-account-setup.sh`.
 
 You can check which Gcloud service account is active using:
 ```
@@ -49,12 +49,13 @@ cd 1-Cloud-Resource-Provisioning-Stage/
 ```
 
 2. Open `config.sh` and edit the value of **ANSIBLE_PUBLIC_KEY_PATH** to point to the path of the ansible public key on disk. If you followed the instructions in **0-Initial-Setup-Stage**, this should be its path: `~/.ssh/ansible.pub`.
+
 3. Edit other parameters as needed. Note that:
   - You probably want to use a domain other than `issessions.ca` if you do not own that domain.
   - You may wish to give VMs more or less resources.
   - You may wish to upgrade the OS images in use.
-4. Run scripts in ascending order. Select only the components you wish to build (See the "Modular Components" section). 
 
+4. Run scripts in ascending order. Select only the components you wish to build (See the "Modular Components" section). 
 
 Every script has two switches, an **up** switch and a **down** switch. The **up** switch builds infrastructure, whereas the **down** switch tears them down.  For example, to build the vpn component, run:
 
@@ -72,7 +73,7 @@ And to tear it down, run:
 
 ![Teardown Image](readme-images/2.png)
 
-4. Create DNS records for internet-facing hosts (Nginx, HAProxy, etc.) as directed by each script. 
+5. Create DNS records for internet-facing hosts (Nginx, HAProxy, etc.) as directed by each script. 
 
 For example, a script will spit out the public IP address of the Nginx host and ask you to add a DNS A record to your public domain mapping that IP to a particular hostname (such as "ctf.issessions.ca"). Note that the hostname given by the script is only a suggestion. You can use other hostnames if you wish. Just be consistent when configuring services later on.
 
