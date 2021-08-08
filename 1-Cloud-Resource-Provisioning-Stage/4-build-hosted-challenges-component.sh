@@ -178,12 +178,6 @@ if [ "$SCRIPT_MODE" = "up" ]; then
   # Get ingress-nginx-controller public IP
   INGRESS_NGINX_CONTROLLER_PUBLIC_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
-  # Communicate Important Information
-  echo -e "\n${YELLOW}>>>Next Steps: To allow access to TCP-Based challenges (netcat/SSH/etc.), add a DNS A record on your public domain's DNS portal"\
-	  "mapping challenges.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN} to HAProxy's Public IP: ${HAPROXY_PUBLIC_IP}<<<${ENDCOLOR}"
-
-  echo -e "${YELLOW}This is required because players connect to the challenge Louai's Labyrinth, for example, by SSHing into"\
-	  "challenges.${PUBLIC_CTF_SUBDOMAIN}.${PUBLIC_DOMAIN}:30500${ENDCOLOR}" 
 
 elif [ "$SCRIPT_MODE" = "down" ]; then
   
