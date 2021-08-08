@@ -6,8 +6,8 @@
 **Chik-p (pronounced "Chickpea")** is a **semi-automated** CTF-building toolkit that aims to:
 
 - Cut down the time it takes build a Capture the Flag (CTF) environment so that CTF organizers can focus on what matters: creating unique challenges and memorable experiences for all participants
-- Deliver a simple-to-use, fully-featured CTF environment that can support small to medium-sized CTFs (~200-800 particants); and to
-- Leverage tools like CTFd, Docker, and Kubernetes to deploy both file-based and hosted challenges (netcat/SSH/etc.).
+- Deliver a simple-to-use, fully-featured CTF environment that can support small to medium-sized CTFs (~200-800 participants); and to
+- Leverage tools like CTFd, Ansible, Docker, and Kubernetes to deploy both file-based and hosted challenges (netcat/SSH/etc.).
 
 Chik-p has supported several GTA-based CTFs including **ISSessionsCTF2021** and **C3X: Dark Cloud Rising**.
 
@@ -46,7 +46,7 @@ The CTF's virtual private cloud (VPC) is divided into three subnets:
 
 Credentials are stored in (and pulled from) a LastPass password vault using the Ansible's `community.general.lastpass` module.
 
-Hosted challenge images are pushed to a Google Container Registry (GCP) and then started as Deployments on the GKE cluster.
+Hosted challenge images are pushed to a Google Container Registry (GCR) and then started as Deployments on the GKE cluster.
 
 Chikpea's architecture assumes a **100% online CTF** (i.e. not on-premises and not behind a VPN).
 
