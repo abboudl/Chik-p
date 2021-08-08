@@ -22,7 +22,7 @@ Change directories into the **2-Wireguard-VPN-Setup-Stage** directory.
 cd 2-Wireguard-VPN-Setup-Stage/
 ```
 
-In `docker-compose.yml`, under the `environment` key, set the `SERVERURL` parameter to your VPN's public domain name (i.e. the one reflected in the DNS A record you created). Subsitute it in place of `vpn.ctf.issessions.ca`.
+In `docker-compose.yml`, under the `environment` key, set the `SERVERURL` parameter to your VPN's public domain name.
 
 ![docker-compose image](readme-images/1.png)
 
@@ -30,7 +30,7 @@ In `docker-compose.yml`, under the `environment` key, set the `SERVERURL` parame
 
 Modify other parameters under the `environment` key in `docker-compose.yml` as needed. A full description of each parameter can be found [here](https://hub.docker.com/r/linuxserver/wireguard).
 
-**Important**: Remember, modifications to the default configuration must be consistent with actions taken in previous steps and may affect future steps. For example, if you want change the `SERVERPORT` parameter in `docker-compose.yml` to a different port than `51280`, you would have to change the `WG_PORT` parameter in `config.sh` in **1-Cloud-Resource-Provisioning-Stage** and execute the `2-build-vpn-component.sh` to ensure that the correct firewall port is opened to the VPN.
+**Important**: Remember, modifications to the default configuration must be consistent with actions taken in previous steps and may affect future steps. For example, if you want to change the `SERVERPORT` parameter in `docker-compose.yml` to a different port than `51280`, you would have to change the `WG_PORT` parameter in `config.sh` in **1-Cloud-Resource-Provisioning-Stage** and execute the `2-build-vpn-component.sh` to ensure that the correct firewall port is opened to the VPN.
 
 
 ### Step #3: Login to Lastpass using the `lpass` Commandline Utiltiy 
@@ -71,7 +71,7 @@ ssh-add ~/.ssh/ctf
 
 ### Step #5: Set Ansible's Target Host in `inventory.yml` 
 
-Set it to your VPN's public domain name (i.e. the one reflected in the DNS A record you created). Subsitute it in place of `vpn.ctf.issessions.ca`. Effectively, we are telling Ansible where to run the ansible playbooks (i.e. the VPN host).
+Navigate to the playbook directory and edit the `inventory.yml` file. Set the host to be your VPN's public domain name (i.e. the one reflected in the DNS A record you created). Substitute it in place of `vpn.ctf.issessions.ca`. Effectively, we are telling Ansible where to run the ansible playbooks (i.e. the VPN host).
 
 
 ### Step #6: Run Ansible Playbooks
@@ -102,12 +102,9 @@ If all playbooks execute without errors, you should see a JSON blob telling you 
 
 ![docker-compose image](readme-images/3.png)
 
-You can verify this by SSHing into the Wireguard host manually as the `ctf`.
+You can verify this by SSHing into the Wireguard host manually as `ctf`, then checking for running containers.
 ```
 ssh ctf@<your_vpn_public_domain>
-```
-Then checking for running containers:
-```
 docker container ls
 ```
 ![docker-compose image](readme-images/4.png)
