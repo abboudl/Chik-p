@@ -87,7 +87,7 @@ These repositories are also provided as **templates**.
 1. **Initial Setup Stage**
     - Create a Google Account and a Google Cloud Platform (GCP) project for the CTF
     - Set up the CTF Management VM
-    - Create a Gcloud service account and activate it on the Management VM 
+    - Create a gcloud service account and activate it on the management VM 
     - Generate SSH Keys for accounts critical to the success of the infrastructure build process
     - Create a LastPass account for the CTF infrastructure and seed it with credentials
 3. **Cloud Resource Provisioning Stage**
