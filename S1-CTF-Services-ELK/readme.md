@@ -55,7 +55,7 @@ Internal Subnet.
 
 ### Important Accounts, Credentials, and Secrets
 
-During service deployment, Ansible uses the `lpass` commandline utility to retrieve secrets from a LastPass password vault. The following tables catalog all secrets related to ELK that must be set up in lastpass prior to the <automated infrastructure build process>.
+During service deployment, Ansible uses the `lpass` commandline utility to retrieve secrets from a LastPass password vault. The following tables catalog all secrets related to ELK that must be set up in lastpass prior to service deployment.
 
 | LastPass ID                     | Secret Type | Username         | Description | 
 |---------------------------------|-------------|------------------|-------------|
