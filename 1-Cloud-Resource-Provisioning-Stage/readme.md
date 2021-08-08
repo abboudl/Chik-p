@@ -79,7 +79,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 <br />
 
-## GCP Resource Catalog: `1-build-network-component.sh`
+## GCP Resource Catalog: `0-build-network-component.sh`
 
 ### VPC Network, Subnets, and Cloud Router
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource                      | Description                                                           |
@@ -111,7 +111,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 <br />
 
-## GCP Resource Catalog: `2-build-vpn-component.sh`
+## GCP Resource Catalog: `1-build-vpn-component.sh`
 
 ### IP Addresses
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource       | Description                                                                                              |
@@ -149,7 +149,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 <br />
 
-## GCP Resource Catalog: `3-build-scoreboard-component.sh`
+## GCP Resource Catalog: `2-build-scoreboard-component.sh`
 ### IP Addresses
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource       | Description                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------|
@@ -184,7 +184,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 <br />
 
-## GCP Resource Catalog: `4-build-monitoring-component.sh`
+## GCP Resource Catalog: `3-build-monitoring-component.sh`
 ### IP Addresses
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource       | Description                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------|
@@ -216,7 +216,7 @@ For example, a script will spit out the public IP address of the Nginx host and 
 
 <br />
 
-## GCP Resource Catalog: `5-build-hosted-challenges-component.sh`
+## GCP Resource Catalog: `4-build-hosted-challenges-component.sh`
 ### IP Addresses
 | Google&nbsp;Cloud&nbsp;Platform&nbsp;Resource       | Description                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------------------|
