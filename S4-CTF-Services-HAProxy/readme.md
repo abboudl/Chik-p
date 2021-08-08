@@ -2,12 +2,12 @@
 
 ## Purpose
 
-HAProxy is "is a free, very fast and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications." It augments the CTF's infrastructure by:
+HAProxy is "a free, very fast, and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications." It augments the CTF's infrastructure by:
 - Acting as a proxy to TCP-based challenges running on a private Google Kubernetes Engine (GKE) cluster
 - Providing load balancing to the nodes in the cluster so that no single node is overwhelmed with connections
 - Limiting the number of simultaneous connections to TCP-based challenges (netcat, SSH, etc.) 
 
-This repository a HAProxy docker image. This service is deployed using docker-compose and Ansible as part of the automated infrastructure build process. 
+This repository houses a HAProxy docker image. This service is deployed using docker-compose and Ansible as part of the automated infrastructure build process. 
 
 
 ## Configuration
@@ -28,7 +28,7 @@ In this context, a frontend block is a port representing an entrypoint to a chal
 
 A backend block, on the other hand, is a listing of the Kubernetes cluster nodes (i.e. hosts) where challenge pods reside. Each TCP-based challenge in Kubernetes is exposed to the world using a NodePort service. This service exposes the challenge on the same port on all Kubernetes nodes.  
 
-The port assigned in the configuration of the Nodeport service exposing a challenge must be the same as the port assigned to the challenge's frontend block in HAProxy. In the current configuration, HAProxy, by default, passes an incoming connection to a frontend port to the same port on one backend host (based on the roundrobin loadbalancing algorithm).
+The port assigned in the configuration of the Nodeport service exposing a challenge must be the same as the port assigned to the challenge's frontend block in HAProxy. In the current configuration, HAProxy, by default, passes an incoming connection to a frontend port to the same port on backend hosts, using a roundrobin load balancing algorithm.
 
 To create a frontend block for a TCP-based challenge, simply add a `frontend` block like this and modify the port to one matching the port you specified in the NodePort service exposing the challenge.
 ```
@@ -52,7 +52,7 @@ DMZ Subnet.
 
 ### Important Accounts, Credentials, and Secrets
 
-During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to HAProxy that must be set up in lastpass prior to the <automated infrastructure build process>.
+During service deployment, Ansible uses the `lpass` commandline utility to retrieve passwords from a LastPass password vault. The following tables catalog all secrets related to HAProxy that must be set up in lastpass prior to service deployment.
 
 | LastPass ID                     | Secret Type              | Username            | Description                                                                                              | 
 |---------------------------------|--------------------------|---------------------|----------------------------------------------------------------------------------------------------------|
