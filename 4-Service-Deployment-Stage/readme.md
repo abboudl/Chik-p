@@ -7,7 +7,7 @@ Then on each remote host, they:
 - Clone the Chik-p Github respoitory
 - Pull the relevant service's secrets from LastPass to create a `.env` secrets file
 - Transfer the `.env` secrets file to that service's folder on the remote host where it can be read by `docker-compose`. For example, `/home/ctf/Chik-p/S1-CTF-Services-ELK/`.
-- Transfer any needed TLS certificates that service's folder into the proper location expected by that service's `Dockerfile`.
+- Transfer TLS certificates as needed.
 - Build the service's `docker` image and start the container.
 
 ## Prerequisites
@@ -61,7 +61,7 @@ If not, you can start one using:
 eval `ssh-agent`
 ```
 
-Next, check if the agent already has the `ctf` user's private key -- `~/.ssh/ctf` -- added to the its keychain. You can check by running the following command:
+Next, check if the agent already has the `ctf` user's private key -- `~/.ssh/ctf` -- added to its keychain. You can check by running the following command:
 ```
 ssh-add -l
 ```
