@@ -61,35 +61,35 @@ if [ "$SCRIPT_MODE" = "up" ]; then
   # Create Wireguard Host
   echo -e "\n${GREEN}>>>Creating Wireguard Host (${WG_INTERNAL_HOSTNAME}.${INTERNAL_DNS_ZONE_DOMAIN})<<<${ENDCOLOR}"
   gcloud compute instances create "$WG_HOST_ID" \
-          --hostname="$WG_INTERNAL_HOSTNAME.$INTERNAL_DNS_ZONE_DOMAIN" \
-          --description="VM instance will host Wireguard Gateway." \
-          --zone="$GCP_ZONE" \
-          --machine-type="$WG_MACHINE_TYPE" \
-          --subnet="$DMZ_SUBNET_ID" \
-          --private-network-ip="$WG_INTERNAL_IP" \
-          --address="$WG_PUBLIC_IP" \
-          --network-tier="PREMIUM" \
-          --maintenance-policy="MIGRATE" \
-          --tags="wireguard-server" \
-          --image="$WG_MACHINE_IMAGE" \
-          --image-project="$WG_MACHINE_IMAGE_PROJECT" \
-          --boot-disk-size="$WG_MACHINE_DISK_SIZE" \
-          --boot-disk-type="$WG_MACHINE_DISK_TYPE" \
-          --boot-disk-device-name="wireguard" \
-          --reservation-affinity="any" \
-          --no-shielded-secure-boot \
-          --shielded-vtpm \
-          --shielded-integrity-monitoring \
-	  --can-ip-forward \
-          --metadata-from-file=ssh-keys="$ANSIBLE_PUBLIC_KEY_PATH"
+    --hostname="$WG_INTERNAL_HOSTNAME.$INTERNAL_DNS_ZONE_DOMAIN" \
+    --description="VM instance will host Wireguard Gateway." \
+    --zone="$GCP_ZONE" \
+    --machine-type="$WG_MACHINE_TYPE" \
+    --subnet="$DMZ_SUBNET_ID" \
+    --private-network-ip="$WG_INTERNAL_IP" \
+    --address="$WG_PUBLIC_IP" \
+    --network-tier="PREMIUM" \
+    --maintenance-policy="MIGRATE" \
+    --tags="wireguard-server" \
+    --image="$WG_MACHINE_IMAGE" \
+    --image-project="$WG_MACHINE_IMAGE_PROJECT" \
+    --boot-disk-size="$WG_MACHINE_DISK_SIZE" \
+    --boot-disk-type="$WG_MACHINE_DISK_TYPE" \
+    --boot-disk-device-name="wireguard" \
+    --reservation-affinity="any" \
+    --no-shielded-secure-boot \
+    --shielded-vtpm \
+    --shielded-integrity-monitoring \
+    --can-ip-forward \
+    --metadata-from-file=ssh-keys="$ANSIBLE_PUBLIC_KEY_PATH"
 
   # Firewall: Allow Access to VPN
   echo -e "\n${GREEN}>>>Creating Firewall Rule: Allow Any (0.0.0.0/0) to VPN Host on ${WG_PROTOCOL}-${WG_PORT}<<<${ENDCOLOR}"
   gcloud compute firewall-rules create "allow-vpn-$WG_PROTOCOL-$WG_PORT" \
 	  --direction="INGRESS" \
 	  --priority="1000" \
-          --network="$VPC_NETWORK" \
-          --action="ALLOW" \
+    --network="$VPC_NETWORK" \
+    --action="ALLOW" \
 	  --rules="$WG_PROTOCOL:$WG_PORT" \
 	  --source-ranges="0.0.0.0/0" \
 	  --target-tags="wireguard-server"
