@@ -1,10 +1,9 @@
 # Create Virtual Private Cloud (VPC)
 resource "google_compute_network" "vpc_network" {
-  name                            = var.vpc_network
-  delete_default_routes_on_create = true
-  auto_create_subnetworks         = false
-  routing_mode                    = "REGIONAL"
-  mtu                             = 1460
+  name                    = var.vpc_network
+  auto_create_subnetworks = false
+  routing_mode            = "REGIONAL"
+  mtu                     = 1460
 }
 
 # Create Subnets
@@ -69,7 +68,7 @@ resource "google_compute_firewall" "allow_icmp" {
 resource "google_dns_managed_zone" "dns_zone" {
   name        = var.internal_dns_zone_id
   description = "Private DNS Zone for ISSessionsCTF Infrastructure."
-  dns_name    = var.internal_dns_zone_domain
+  dns_name    = "${var.internal_dns_zone_domain}."
   visibility  = "private"
 
   private_visibility_config {
