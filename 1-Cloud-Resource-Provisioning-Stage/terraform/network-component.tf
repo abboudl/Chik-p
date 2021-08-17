@@ -1,6 +1,6 @@
 # Create Virtual Private Cloud (VPC)
 resource "google_compute_network" "vpc_network" {
-  name                    = var.vpc_network
+  name                    = "ctf-vpc"
   auto_create_subnetworks = false
   routing_mode            = "REGIONAL"
   mtu                     = 1460
@@ -8,20 +8,20 @@ resource "google_compute_network" "vpc_network" {
 
 # Create Subnets
 resource "google_compute_subnetwork" "dmz_subnet" {
-  name          = var.dmz_subnet_id
-  ip_cidr_range = var.dmz_subnet_ip_range
+  name          = "dmz-subnet"
+  ip_cidr_range = "10.10.10.0/24"
   network       = google_compute_network.vpc_network.id
 }
 
 resource "google_compute_subnetwork" "internal_subnet" {
-  name          = var.internal_subnet_id
-  ip_cidr_range = var.internal_subnet_ip_range
+  name          = "internal-subnet"
+  ip_cidr_range = "10.10.20.0/24"
   network       = google_compute_network.vpc_network.id
 }
 
 resource "google_compute_subnetwork" "internal_hosted_challenges_subnet" {
-  name          = var.internal_hosted_challenges_subnet_id
-  ip_cidr_range = var.internal_hosted_challenges_subnet_ip_range
+  name          = "hosted-challenges-cluster-subnet"
+  ip_cidr_range = "10.10.30.0/24"
   network       = google_compute_network.vpc_network.id
 }
 
@@ -66,7 +66,7 @@ resource "google_compute_firewall" "allow_icmp" {
 
 # Create Managed Cloud DNS Zone
 resource "google_dns_managed_zone" "dns_zone" {
-  name        = var.internal_dns_zone_id
+  name        = "ctf-private-dns-zone"
   description = "Private DNS Zone for ISSessionsCTF Infrastructure."
   dns_name    = "${var.internal_dns_zone_domain}."
   visibility  = "private"

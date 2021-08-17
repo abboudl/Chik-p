@@ -4,13 +4,18 @@ resource "google_compute_address" "nginx_external_ip" {
   address_type = "EXTERNAL"
   network_tier = var.network_tier
 }
+# Nginx and CTFd IP local variables
+locals {
+  nginx_internal_ip = "10.10.10.8"
+  ctfd_internal_ip = "10.10.20.49"
+}
 
 # Nginx Host Internal IP
 resource "google_compute_address" "nginx_internal_ip" {
   name         = "nginx-internal-static-ip"
   address_type = "INTERNAL"
   subnetwork   = google_compute_subnetwork.dmz_subnet.id
-  address      = var.nginx.internal_ip
+  address      = local.nginx_internal_ip
 }
 
 # CTFd Host Internal IP
@@ -18,25 +23,25 @@ resource "google_compute_address" "ctfd_internal_ip" {
   name         = "ctfd-internal-static-ip"
   address_type = "INTERNAL"
   subnetwork   = google_compute_subnetwork.internal_subnet.id
-  address      = var.ctfd.internal_ip
+  address      = local.ctfd_internal_ip
 }
 
 # Create nginx A Record
 resource "google_dns_record_set" "nginx_dns" {
   managed_zone = google_dns_managed_zone.dns_zone.name
-  name         = "${var.nginx.internal_hostname}.${var.internal_dns_zone_domain}."
+  name         = "nginx.${var.internal_dns_zone_domain}."
   type         = "A"
   ttl          = 300
-  rrdatas      = [var.nginx.internal_ip]
+  rrdatas      = [local.nginx_internal_ip]
 }
 
 # Create ctfd A Record
 resource "google_dns_record_set" "ctfd_dns" {
   managed_zone = google_dns_managed_zone.dns_zone.name
-  name         = "${var.ctfd.internal_hostname}.${var.internal_dns_zone_domain}."
+  name         = "ctfd.${var.internal_dns_zone_domain}."
   type         = "A"
   ttl          = 300
-  rrdatas      = [var.ctfd.internal_ip]
+  rrdatas      = [local.ctfd_internal_ip]
 }
 
 # Get nginx Public IP
@@ -44,27 +49,27 @@ data "google_compute_address" "nginx_public_ip" {
   name = google_compute_address.nginx_external_ip.name
 }
 
-# Create nginx Host
+# Create Nginx Host
 resource "google_compute_instance" "nginx_instance" {
-  name         = var.nginx.host_id
-  description  = "VM instance will host ISSessionsCTF Nginx container acting as a reverse proxy to CTFd."
-  hostname     = "${var.nginx.internal_hostname}.${var.internal_dns_zone_domain}"
-  machine_type = var.nginx.machine_type
+  name         = "nginx-int-ctf"
+  description  = "VM instance will host Nginx container acting as a reverse proxy to CTFd."
+  hostname     = "nginx.${var.internal_dns_zone_domain}"
+  machine_type = "e2-medium"
   tags         = ["nginx-server"]
 
   boot_disk {
     device_name = "nginx"
 
     initialize_params {
-      image = var.nginx.machine_image
-      size  = var.nginx.machine_disk_size
-      type  = var.nginx.machine_disk_type
+      image = "ubuntu-os-cloud/ubuntu-2004-focal-v20210720"
+      size  = 20
+      type  = "pd-standard"
     }
   }
 
   network_interface {
     subnetwork = google_compute_subnetwork.dmz_subnet.id
-    network_ip = var.nginx.internal_ip
+    network_ip = local.nginx_internal_ip
 
     access_config {
       network_tier = var.network_tier
@@ -93,25 +98,25 @@ resource "google_compute_instance" "nginx_instance" {
 
 # Create ctfd Host
 resource "google_compute_instance" "ctfd_instance" {
-  name         = var.ctfd.host_id
-  description  = "VM instance will host ISSessionsCTF CTFd containers including the CTFd Flask application, a MariaDB MySQL database, and a Redis cache."
-  hostname     = "${var.ctfd.internal_hostname}.${var.internal_dns_zone_domain}"
-  machine_type = var.ctfd.machine_type
+  name         = "ctfd-int-ctf"
+  description  = "VM instance will host CTFd containers including the CTFd Flask application, a MariaDB MySQL database, and a Redis cache."
+  hostname     = "ctfd.${var.internal_dns_zone_domain}"
+  machine_type = "e2-standard-4"
   tags         = ["ctfd-server"]
 
   boot_disk {
     device_name = "ctfd"
 
     initialize_params {
-      image = var.ctfd.machine_image
-      size  = var.ctfd.machine_disk_size
-      type  = var.ctfd.machine_disk_type
+      image = "ubuntu-os-cloud/ubuntu-2004-focal-v20210720"
+      size  = 200
+      type  = "pd-ssd"
     }
   }
 
   network_interface {
     subnetwork = google_compute_subnetwork.internal_subnet.id
-    network_ip = var.ctfd.internal_ip
+    network_ip = local.ctfd_internal_ip
   }
 
   shielded_instance_config {
@@ -171,7 +176,6 @@ resource "google_compute_firewall" "nginx_to_ctfd" {
   network       = google_compute_network.vpc_network.name
   direction     = "INGRESS"
   priority      = "1000"
-  source_ranges = ["0.0.0.0/0"]
 
   allow {
     protocol = "tcp"

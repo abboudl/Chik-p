@@ -18,7 +18,7 @@ locals {
 
 # Wireguard Public DNS A Record
 resource "cloudflare_record" "wireguard_external_dns" {
-  name    = "${var.wg_internal_hostname}.${var.public_ctf_subdomain}.${var.public_domain}"
+  name    = "vpn.${var.public_ctf_subdomain}.${var.public_domain}"
   type    = "A"
   value   = data.google_compute_address.wg_public_ip.address
   zone_id = local.zone_id

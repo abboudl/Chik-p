@@ -6,20 +6,24 @@ resource "google_compute_address" "wireguard_external_ip" {
 }
 
 # Wireguard Host Internal IP
+locals {
+  wg_internal_ip = "10.10.10.7"
+}
+
 resource "google_compute_address" "wireguard_internal_ip" {
   name         = "wireguard-internal-static-ip"
   address_type = "INTERNAL"
   subnetwork   = google_compute_subnetwork.dmz_subnet.id
-  address      = var.wg_internal_ip
+  address      = local.wg_internal_ip
 }
 
 # Create wireguard A Record
 resource "google_dns_record_set" "wireguard_dns" {
   managed_zone = google_dns_managed_zone.dns_zone.name
-  name         = "${var.wg_internal_hostname}.${var.internal_dns_zone_domain}."
+  name         = "wireguard.${var.internal_dns_zone_domain}."
   type         = "A"
   ttl          = 300
-  rrdatas      = [var.wg_internal_ip]
+  rrdatas      = [local.wg_internal_ip]
 }
 
 # Get external Public IP
@@ -29,10 +33,10 @@ data "google_compute_address" "wg_public_ip" {
 
 # Create Wireguard Host
 resource "google_compute_instance" "wireguard_instance" {
-  name           = var.wg_host_id
+  name           = "wireguard-int-ctf"
   description    = "VM instance will host Wireguard Gateway."
-  hostname       = "${var.wg_internal_hostname}.${var.internal_dns_zone_domain}"
-  machine_type   = var.wg_machine_type
+  hostname       = "wireguard.${var.internal_dns_zone_domain}"
+  machine_type   = "e2-small"
   tags           = ["wireguard-server"]
   can_ip_forward = true
 
@@ -40,15 +44,15 @@ resource "google_compute_instance" "wireguard_instance" {
     device_name = "wireguard"
 
     initialize_params {
-      image = var.wg_machine_image
-      size  = var.wg_machine_disk_size
-      type  = var.wg_machine_disk_type
+      image = "ubuntu-os-cloud/ubuntu-2004-focal-v20210720"
+      size  = 20
+      type  = "pd-standard"
     }
   }
 
   network_interface {
     subnetwork = google_compute_subnetwork.dmz_subnet.id
-    network_ip = var.wg_internal_ip
+    network_ip = local.wg_internal_ip
 
     access_config {
       network_tier = var.network_tier
@@ -77,7 +81,7 @@ resource "google_compute_instance" "wireguard_instance" {
 
 # Firewall: Allow Access to VPN
 resource "google_compute_firewall" "allow_vpn" {
-  name          = "allow-vpn"
+  name          = "allow-vpn-udp-51820"
   network       = google_compute_network.vpc_network.name
   direction     = "INGRESS"
   priority      = "1000"
@@ -95,9 +99,7 @@ resource "google_compute_firewall" "allow_vpn" {
 resource "google_compute_route" "vpn_route" {
   name                   = "vpn-route-to-virtual-client-network"
   network                = google_compute_network.vpc_network.id
-  next_hop_instance      = google_compute_instance.wireguard_instance.name
-  next_hop_instance_zone = var.gcp_zone
-  dest_range             = var.wg_client_subnet
+  next_hop_instance      = google_compute_instance.wireguard_instance.id
+  dest_range             = "10.13.13.0/24"
   priority               = 1000
-
 }

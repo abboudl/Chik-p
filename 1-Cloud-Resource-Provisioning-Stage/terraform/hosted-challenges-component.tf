@@ -1,9 +1,13 @@
 # HAProxy Host Internal IP
+locals {
+  haproxy_internal_ip = "10.10.10.9"
+}
+
 resource "google_compute_address" "haproxy_internal_ip" {
   name         = "haproxy-internal-static-ip"
   address_type = "INTERNAL"
   subnetwork   = google_compute_subnetwork.dmz_subnet.id
-  address      = var.haproxy.internal_ip
+  address      = local.haproxy_internal_ip
 }
 
 # HAProxy Host Static External Public IP
@@ -21,33 +25,33 @@ data "google_compute_address" "haproxy_public_ip" {
 # Create HAProxy A Record
 resource "google_dns_record_set" "haproxy_dns" {
   managed_zone = google_dns_managed_zone.dns_zone.name
-  name         = "${var.haproxy.internal_hostname}.${var.internal_dns_zone_domain}."
+  name         = "haproxy.${var.internal_dns_zone_domain}."
   type         = "A"
   ttl          = 300
-  rrdatas      = [var.haproxy.internal_ip]
+  rrdatas      = [local.haproxy_internal_ip]
 }
 
 # Create HAProxy Host
 resource "google_compute_instance" "haproxy_instance" {
-  name         = var.haproxy.host_id
+  name         = "haproxy-int-ctf"
   description  = "VM instance will host ISSessionsCTF HAProxy container acting as a proxy to TCP-Based Hosted Challenges."
-  hostname     = "${var.haproxy.internal_hostname}.${var.internal_dns_zone_domain}"
-  machine_type = var.haproxy.machine_type
+  hostname     = "haproxy.${var.internal_dns_zone_domain}"
+  machine_type = "e2-highcpu-2"
   tags         = ["haproxy-server"]
 
   boot_disk {
     device_name = "haproxy"
 
     initialize_params {
-      image = var.haproxy.machine_image
-      size  = var.haproxy.machine_disk_size
-      type  = var.haproxy.machine_disk_type
+      image = "ubuntu-os-cloud/ubuntu-2004-focal-v20210720"
+      size  = 20
+      type  = "pd-standard"
     }
   }
 
   network_interface {
     subnetwork = google_compute_subnetwork.dmz_subnet.id
-    network_ip = var.haproxy.internal_ip
+    network_ip = local.haproxy_internal_ip
 
     access_config {
       network_tier = var.network_tier
@@ -76,7 +80,7 @@ resource "google_compute_instance" "haproxy_instance" {
 
 # Create Kubernetes Cluster
 resource "google_container_cluster" "kube_cluster" {
-  name                     = var.kube.cluster_id
+  name                     = "hosted-challenges-cluster"
   initial_node_count       = 1
   remove_default_node_pool = true
   network                  = google_compute_network.vpc_network.id
@@ -86,12 +90,12 @@ resource "google_container_cluster" "kube_cluster" {
   ip_allocation_policy {}
 
   release_channel {
-    channel = var.kube.cluster_release_channel
+    channel = "STABLE"
   }
 
   private_cluster_config {
     enable_private_nodes    = true
-    enable_private_endpoint = true
+    enable_private_endpoint = false
     master_ipv4_cidr_block  = "10.10.100.0/28"
 
     master_global_access_config {
@@ -102,22 +106,23 @@ resource "google_container_cluster" "kube_cluster" {
   network_policy {
     enabled = true
   }
+}
 
-  master_authorized_networks_config {}
-
+locals {
+  cluster_node_num = 3
 }
 
 resource "google_container_node_pool" "kube_node_pool" {
-  name              = var.kube.cluster_pool_id
+  name              = "hosted-challenges-pool"
   cluster           = google_container_cluster.kube_cluster.id
-  node_count        = var.kube.cluster_node_num
+  node_count        = local.cluster_node_num
   max_pods_per_node = 110
   
   node_config {
-    disk_type    = var.kube.cluster_disk_type
-    disk_size_gb = var.kube.cluster_disk_size
-    image_type   = var.kube.cluster_image_type
-    machine_type = var.kube.cluster_machine_type
+    disk_type    = "pd-standard"
+    disk_size_gb = 50
+    image_type   = "cos_containerd"
+    machine_type = "e2-highmem-2"
     tags         = ["hosted-challenges-node"]
     metadata = {
       disable-legacy-endpoints = true
@@ -148,4 +153,45 @@ resource "google_compute_firewall" "haproxy_stats_panel" {
     protocol = "tcp"
     ports    = ["8080"]
   }
+}
+
+# Get list of nodes in kubernetes cluster
+data "google_compute_instance_group" "kube" {
+  self_link = google_container_cluster.kube_cluster.instance_group_urls[0]
+}
+
+locals {
+  kube_nodes = tolist(data.google_compute_instance_group.kube.instances)
+}
+
+# Data about a node including it's network interface and ip
+data "google_compute_instance" "node" {
+  count = local.cluster_node_num
+  self_link = local.kube_nodes[count.index]
+}
+
+resource "google_dns_record_set" "kube_dns" {
+  count = local.cluster_node_num
+  managed_zone = google_dns_managed_zone.dns_zone.name
+  name         = "challenges-cluster-node-${count.index}.${var.internal_dns_zone_domain}."
+  type         = "A"
+  ttl          = 300
+  rrdatas      = [data.google_compute_instance.node[count.index].network_interface[0].network_ip]
+  depends_on = [google_container_node_pool.kube_node_pool]
+}
+
+# Create hosted-challenges namespace
+resource "kubernetes_namespace" "hosted_challenges" {
+  metadata {
+    name = "hosted-challenges"
+  }
+}
+
+# Install ingress-nginx to route traffic to web-based stateful challenges
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress-controller"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+  namespace = "ingress-nginx"
+  create_namespace = true
 }
