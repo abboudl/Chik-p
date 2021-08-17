@@ -168,7 +168,6 @@ locals {
 data "google_compute_instance" "node" {
   count = local.cluster_node_num
   self_link = local.kube_nodes[count.index]
-  depends_on = [google_container_node_pool.kube_node_pool]
 }
 
 resource "google_dns_record_set" "kube_dns" {
@@ -178,7 +177,6 @@ resource "google_dns_record_set" "kube_dns" {
   type         = "A"
   ttl          = 300
   rrdatas      = [data.google_compute_instance.node[count.index].network_interface[0].network_ip]
-  depends_on = [google_container_node_pool.kube_node_pool]
 }
 
 # Create hosted-challenges namespace
