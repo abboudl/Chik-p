@@ -157,7 +157,7 @@ resource "google_compute_firewall" "haproxy_stats_panel" {
 
 # Get list of nodes in kubernetes cluster
 data "google_compute_instance_group" "kube" {
-  self_link = google_container_cluster.kube_cluster.instance_group_urls[0]
+  self_link = google_container_node_pool.kube_node_pool.instance_group_urls[0]
 }
 
 locals {
@@ -168,6 +168,7 @@ locals {
 data "google_compute_instance" "node" {
   count = local.cluster_node_num
   self_link = local.kube_nodes[count.index]
+  depends_on = [google_container_node_pool.kube_node_pool]
 }
 
 resource "google_dns_record_set" "kube_dns" {
@@ -194,4 +195,5 @@ resource "helm_release" "nginx_ingress" {
   chart      = "ingress-nginx"
   namespace = "ingress-nginx"
   create_namespace = true
+  depends_on = [google_container_node_pool.kube_node_pool]
 }
