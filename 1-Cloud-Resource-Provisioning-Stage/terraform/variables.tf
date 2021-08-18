@@ -19,3 +19,15 @@ variable "public_ctf_subdomain" {
 variable "network_tier" {
   type = string
 }
+
+variable "google_project" {
+  type = string
+}
+
+variable "google_region" {
+  type = string
+}
+
+variable "google_zone" {
+  type = string
+}

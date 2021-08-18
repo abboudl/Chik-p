@@ -2,7 +2,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "3.79.0"
+      version = "3.80.0"
     }
 
     cloudflare = {
@@ -22,10 +22,18 @@ terraform {
   }
 }
 
+module "enable_api" {
+  source = "./modules/enable-api"
+  
+  google_project = var.google_project
+  google_region = var.google_region
+  google_zone = var.google_zone
+}
+
 provider "google" {
-  project = "terraform-322603"
-  region  = "northamerica-northeast1"
-  zone    = "northamerica-northeast1-a"
+  project = module.enable_api.client_config.project
+  region  = module.enable_api.client_config.region
+  zone    = module.enable_api.client_config.zone
 }
 
 data "google_client_config" "provider" {}
