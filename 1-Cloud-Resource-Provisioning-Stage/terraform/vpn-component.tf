@@ -97,9 +97,9 @@ resource "google_compute_firewall" "allow_vpn" {
 
 # Set up GCP Static Route Back to VPN Gateway
 resource "google_compute_route" "vpn_route" {
-  name                   = "vpn-route-to-virtual-client-network"
-  network                = google_compute_network.vpc_network.id
-  next_hop_instance      = google_compute_instance.wireguard_instance.id
-  dest_range             = "10.13.13.0/24"
-  priority               = 1000
+  name              = "vpn-route-to-virtual-client-network"
+  network           = google_compute_network.vpc_network.id
+  next_hop_instance = google_compute_instance.wireguard_instance.id
+  dest_range        = "10.13.13.0/24"
+  priority          = 1000
 }

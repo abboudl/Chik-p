@@ -59,10 +59,10 @@ resource "google_compute_instance" "elk_instance" {
 
 # Allow communication from CTFD Host to ELK Host (Logstash Beats Port 5044)
 resource "google_compute_firewall" "ctfd_elk" {
-  name          = "allow-ctfd-to-elk-logstash-5044"
-  network       = google_compute_network.vpc_network.name
-  direction     = "INGRESS"
-  priority      = "1000"
+  name      = "allow-ctfd-to-elk-logstash-5044"
+  network   = google_compute_network.vpc_network.name
+  direction = "INGRESS"
+  priority  = "1000"
 
   allow {
     protocol = "tcp"
@@ -74,10 +74,10 @@ resource "google_compute_firewall" "ctfd_elk" {
 
 # Allow communication from Nginx Host to ELK Host (Logstash Beats Port 5044)
 resource "google_compute_firewall" "nginx_elk" {
-  name          = "allow-nginx-to-elk-logstash-5044"
-  network       = google_compute_network.vpc_network.name
-  direction     = "INGRESS"
-  priority      = "1000"
+  name      = "allow-nginx-to-elk-logstash-5044"
+  network   = google_compute_network.vpc_network.name
+  direction = "INGRESS"
+  priority  = "1000"
 
   allow {
     protocol = "tcp"
@@ -89,10 +89,10 @@ resource "google_compute_firewall" "nginx_elk" {
 
 # Allow Communication from VPN to ELK Host (Kibana Port 5601)
 resource "google_compute_firewall" "vpn_elk" {
-  name          = "allow-vpn-to-elk-kibana-5601"
-  network       = google_compute_network.vpc_network.name
-  direction     = "INGRESS"
-  priority      = "1000"
+  name      = "allow-vpn-to-elk-kibana-5601"
+  network   = google_compute_network.vpc_network.name
+  direction = "INGRESS"
+  priority  = "1000"
 
   allow {
     protocol = "tcp"
@@ -104,10 +104,10 @@ resource "google_compute_firewall" "vpn_elk" {
 
 # Allow Communication from VPN to ELK Host (Elasticsearch Port 9200) for API calls
 resource "google_compute_firewall" "vpn_elk_es" {
-  name          = "allow-vpn-to-elk-es-9200"
-  network       = google_compute_network.vpc_network.name
-  direction     = "INGRESS"
-  priority      = "1000"
+  name      = "allow-vpn-to-elk-es-9200"
+  network   = google_compute_network.vpc_network.name
+  direction = "INGRESS"
+  priority  = "1000"
 
   allow {
     protocol = "tcp"

@@ -117,7 +117,7 @@ resource "google_container_node_pool" "kube_node_pool" {
   cluster           = google_container_cluster.kube_cluster.id
   node_count        = local.cluster_node_num
   max_pods_per_node = 110
-  
+
   node_config {
     disk_type    = "pd-standard"
     disk_size_gb = 50
@@ -166,12 +166,12 @@ locals {
 
 # Data about a node including it's network interface and ip
 data "google_compute_instance" "node" {
-  count = local.cluster_node_num
+  count     = local.cluster_node_num
   self_link = local.kube_nodes[count.index]
 }
 
 resource "google_dns_record_set" "kube_dns" {
-  count = local.cluster_node_num
+  count        = local.cluster_node_num
   managed_zone = google_dns_managed_zone.dns_zone.name
   name         = "challenges-cluster-node-${count.index}.${var.internal_dns_zone_domain}."
   type         = "A"
@@ -188,10 +188,10 @@ resource "kubernetes_namespace" "hosted_challenges" {
 
 # Install ingress-nginx to route traffic to web-based stateful challenges
 resource "helm_release" "nginx_ingress" {
-  name       = "nginx-ingress-controller"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace = "ingress-nginx"
+  name             = "nginx-ingress-controller"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress-nginx"
   create_namespace = true
-  depends_on = [google_container_node_pool.kube_node_pool]
+  depends_on       = [google_container_node_pool.kube_node_pool]
 }
