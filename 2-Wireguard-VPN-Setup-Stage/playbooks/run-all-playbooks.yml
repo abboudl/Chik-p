@@ -1,0 +1,6 @@
+- import_playbook: 0-install-docker.yml
+- import_playbook: 1-install-docker-compose.yml
+- import_playbook: 2-install-stackdriver-agent.yml
+- import_playbook: 3-set-up-credentials.yml
+- import_playbook: 4-delete-ansible-user.yml
+- import_playbook: 5-start-vpn.yml

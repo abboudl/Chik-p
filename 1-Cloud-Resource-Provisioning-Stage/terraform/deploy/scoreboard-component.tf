@@ -7,7 +7,7 @@ resource "google_compute_address" "nginx_external_ip" {
 # Nginx and CTFd IP local variables
 locals {
   nginx_internal_ip = "10.10.10.8"
-  ctfd_internal_ip = "10.10.20.49"
+  ctfd_internal_ip  = "10.10.20.49"
 }
 
 # Nginx Host Internal IP
@@ -172,15 +172,15 @@ resource "google_compute_firewall" "nginx_https" {
 
 # Allow Communication Between Nginx and CTFD
 resource "google_compute_firewall" "nginx_to_ctfd" {
-  name          = "allow-nginx-to-ctfd"
-  network       = google_compute_network.vpc_network.name
-  direction     = "INGRESS"
-  priority      = "1000"
+  name      = "allow-nginx-to-ctfd"
+  network   = google_compute_network.vpc_network.name
+  direction = "INGRESS"
+  priority  = "1000"
 
   allow {
     protocol = "tcp"
-    ports    = ["8080"]
+    ports    = ["8000"]
   }
-  source_tags = ["ctfd-server"]
-  target_tags = ["nginx-server"]
+  target_tags = ["ctfd-server"]
+  source_tags = ["nginx-server"]
 }

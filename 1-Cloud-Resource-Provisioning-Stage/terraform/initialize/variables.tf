@@ -18,5 +18,4 @@ variable "api" {
     "dns.googleapis.com",
     "container.googleapis.com"
   ]
-
 }

@@ -15,6 +15,6 @@ creds=("ctf_user_pass:ctf"
 for cred in ${creds[@]}; do
     id=($(echo $cred | tr ':' '\n'))
     ((lpass show ${id[0]} &> /dev/null) && echo "${id[0]} already exists") || 
-    (lpass generate --username=${id[1]} chik-p/${id[0]} 16 &> /dev/null && 
+    (lpass generate --no-symbols --username=${id[1]} chik-p/${id[0]} 16 &> /dev/null && 
     echo "${id[0]} password generated")
 done
