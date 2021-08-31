@@ -188,7 +188,7 @@ resource "kubernetes_namespace" "hosted_challenges" {
 
 # Install ingress-nginx to route traffic to web-based stateful challenges
 resource "helm_release" "nginx_ingress" {
-  name             = "nginx-ingress-controller"
+  name             = "ingress-nginx"
   repository       = "https://kubernetes.github.io/ingress-nginx"
   chart            = "ingress-nginx"
   namespace        = "ingress-nginx"

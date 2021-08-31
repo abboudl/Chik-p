@@ -179,8 +179,8 @@ resource "google_compute_firewall" "nginx_to_ctfd" {
 
   allow {
     protocol = "tcp"
-    ports    = ["8080"]
+    ports    = ["8000"]
   }
-  source_tags = ["ctfd-server"]
-  target_tags = ["nginx-server"]
+  target_tags = ["ctfd-server"]
+  source_tags = ["nginx-server"]
 }

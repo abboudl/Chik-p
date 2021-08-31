@@ -22,20 +22,11 @@ terraform {
   }
 }
 
-# Initialize APIs
-module "initialize" {
-  source = "./modules/initialize"
-
-  google_project = var.google_project
-  google_region  = var.google_region
-  google_zone    = var.google_zone
-}
-
 # Setup providers
 provider "google" {
-  project = module.initialize.project
-  region  = module.initialize.client_config.region
-  zone    = module.initialize.client_config.zone
+  project = "ctf-demo-322101"
+  region  = "northamerica-northeast1"
+  zone    = "northamerica-northeast1-a"
 }
 
 data "google_client_config" "provider" {}
