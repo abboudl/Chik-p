@@ -1,0 +1,29 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ctfd-autoscaler
+  labels:
+    app: ctfd
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: ctfd
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 120
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Pods
+        value: 4
+        periodSeconds: 60

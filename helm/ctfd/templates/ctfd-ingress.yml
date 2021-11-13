@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ctfd-ingress
+  namespace: ctfd
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: ctfd.loopset.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ctfd
+            port:
+              number: 8000

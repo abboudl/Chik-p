@@ -9,8 +9,8 @@ services:
         - SYS_MODULE
     environment:
         - PUID=1002 # ctf user's UID    
-        - PGID=1003 # ctf group's GID
-        - TZ=America/Montreal # location of GCP servers
+        - PGID=1002 # ctf group's GID
+        - TZ=America/Toronto # location of GCP servers
         - SERVERURL=vpn.ctf.issessions.ca # VPN server public FQDN
         - SERVERPORT=51820 # VPN port
         - PEERS=1 # will create a client configuration called peer1.conf

@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ctfd
+  labels:
+    app: ctfd
+spec:
+  serviceName: ctfd
+  replicas: 1
+  podManagementPolicy: "Parallel"
+  selector:
+    matchLabels:
+      app: ctfd
+  template:
+    metadata:
+      labels:
+        app: ctfd
+    spec:
+      containers:
+        - name: ctfd
+          image: mode87/ctfd #ctfd/ctfd:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+          - name: WORKERS
+            value: "2"
+          - name: DATABASE_URL
+            value: mysql+pymysql://ctfd:ctfd@mariadb/ctfd
+          - name: REDIS_URL
+            value: redis://redis-master:6379
+          - name: SECRET_KEY
+            value: <./_8Gk>vf2HTV~+
+          - name: REVERSE_PROXY
+            value: "true"
+          - name: LOG_FOLDER
+            value: /var/log/CTFd
+          - name: UPLOAD_FOLDER
+            value: /var/uploads
+          - name: ACCESS_LOG
+            value: "-" #"/var/log/CTFd/access.log
+          - name: ERROR_LOG
+            value: "-" #/var/log/CTFd/error.log
+          - name: SWAGGER_UI
+            value: "true"
+          - name: HTML_SANITIZATION
+            value: "true"
+          - name: WORKER_CLASS
+            value: gevent
+          #- name: THREADS
+          #  value: "--threads 1"
+          - name: TIMEOUT
+            value: "60"
+          - name: WORKER_CONNECTIONS
+            value: "2000"
+          resources:
+            limits:
+              cpu: 800m
+              memory: 280Mi
+            requests:
+              cpu: 500m
+              memory: 180Mi
+          livenessProbe:
+            httpGet:
+              port: 8000
+            periodSeconds: 30
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              port: 8000
+            periodSeconds: 5
+            initialDelaySeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+          - name: logs
+            mountPath: /var/log/CTFd 
+          - name: ctfd-uploads-pvc
+            mountPath: /var/uploads
+      volumes:
+        - name: ctfd-uploads-pvc
+          persistentVolumeClaim:
+            claimName: ctfd-uploads-pvc  
+      securityContext:
+        fsGroup: 1001
+  volumeClaimTemplates:
+  - metadata:
+      name: logs
+    spec:
+      accessModes: 
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi

@@ -25,8 +25,8 @@ terraform {
 # Setup providers
 provider "google" {
   project = "ctf-demo-322101"
-  region  = "northamerica-northeast1"
-  zone    = "northamerica-northeast1-a"
+  region  = "northamerica-northeast2"
+  zone    = "northamerica-northeast2-a"
 }
 
 data "google_client_config" "provider" {}

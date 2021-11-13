@@ -86,11 +86,11 @@ resource "google_container_cluster" "kube_cluster" {
   network                  = google_compute_network.vpc_network.id
   subnetwork               = google_compute_subnetwork.internal_hosted_challenges_subnet.id
   enable_shielded_nodes    = true
-
+  min_master_version = "1.21.5-gke.1302"
   ip_allocation_policy {}
 
   release_channel {
-    channel = "STABLE"
+    channel = "UNSPECIFIED"
   }
 
   private_cluster_config {
@@ -109,7 +109,9 @@ resource "google_container_cluster" "kube_cluster" {
 }
 
 locals {
-  cluster_node_num = 3
+  cluster_node_num = 1
+  machine_type_testing = "e2-medium"
+  machine_type_production = "e2-highmem-2"
 }
 
 resource "google_container_node_pool" "kube_node_pool" {
@@ -117,26 +119,24 @@ resource "google_container_node_pool" "kube_node_pool" {
   cluster           = google_container_cluster.kube_cluster.id
   node_count        = local.cluster_node_num
   max_pods_per_node = 110
+  #version = "1.21.5-gke.1302"
 
   node_config {
     disk_type    = "pd-standard"
     disk_size_gb = 50
-    image_type   = "cos_containerd"
-    machine_type = "e2-highmem-2"
+    image_type   = "ubuntu_containerd"
+    machine_type = local.machine_type_production
     tags         = ["hosted-challenges-node"]
     metadata = {
       disable-legacy-endpoints = true
     }
   }
-
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 8
+  }
   management {
     auto_repair  = true
-    auto_upgrade = true
-  }
-
-  upgrade_settings {
-    max_surge       = 1
-    max_unavailable = 0
   }
 }
 
@@ -177,21 +177,4 @@ resource "google_dns_record_set" "kube_dns" {
   type         = "A"
   ttl          = 300
   rrdatas      = [data.google_compute_instance.node[count.index].network_interface[0].network_ip]
-}
-
-# Create hosted-challenges namespace
-resource "kubernetes_namespace" "hosted_challenges" {
-  metadata {
-    name = "hosted-challenges"
-  }
-}
-
-# Install ingress-nginx to route traffic to web-based stateful challenges
-resource "helm_release" "nginx_ingress" {
-  name             = "ingress-nginx"
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  chart            = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  create_namespace = true
-  depends_on       = [google_container_node_pool.kube_node_pool]
 }

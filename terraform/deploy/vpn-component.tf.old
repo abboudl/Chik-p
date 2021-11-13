@@ -36,7 +36,7 @@ resource "google_compute_instance" "wireguard_instance" {
   name           = "wireguard-int-ctf"
   description    = "VM instance will host Wireguard Gateway."
   hostname       = "wireguard.${var.internal_dns_zone_domain}"
-  machine_type   = "e2-small"
+  machine_type   = "e2-micro"
   tags           = ["wireguard-server"]
   can_ip_forward = true
 

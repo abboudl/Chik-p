@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load
+  labels:
+    app: load
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: load
+  template:
+    metadata:
+      labels:
+        app: load
+    spec:
+      containers:
+        - name: load
+          image: busybox
+          command: ["/bin/sh","-c","while sleep 0.01; do wget -q -O- ctfd.ctfd.svc.cluster.local:8000; done"]
+          resources:
+                requests:
+                  cpu: 10m
+                  memory: 15Mi

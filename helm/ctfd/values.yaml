@@ -1,0 +1,20 @@
+redis:
+  architecture: standalone
+  auth:
+    enabled: false
+  fullnameOverride: redis
+mariadb:
+  fullnameOverride: mariadb
+  auth:
+    rootPassword: ctfd
+    username: ctfd
+    password: ctfd
+    database: ctfd
+  primary:
+    extraFlags: "--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --wait_timeout=28800 --log-warnings=0"
+    persistence:
+      size: 10Gi
+      existingClaim: mariadb-pvc
+    podSecurityContext:
+      fsGroup: 1000
+cloud: true

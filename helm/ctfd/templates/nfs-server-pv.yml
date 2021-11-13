@@ -1,0 +1,16 @@
+{{ if .Values.cloud }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-server-pv
+spec:
+  storageClassName: nfs-server-data
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  
+  gcePersistentDisk:
+    pdName: ctfd-uploads
+    fsType: ext4
+{{ end }}
